@@ -13,9 +13,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import tid.abno.modules.policy.L0PCECapabilities;
-import tid.abno.modules.policy.MediaChannel;
-import tid.abno.modules.policy.Policy;
+import es.tid.abno.modules.policy.L0PCECapabilities;
+import es.tid.abno.modules.policy.MediaChannel;
+import es.tid.abno.modules.policy.Policy;
+
 
 
 
