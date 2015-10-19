@@ -2,7 +2,7 @@
 Reference Implementation of ABNO
 
 ## Things to consider
-- Own ABNOController implementation needs a PCE Session, if there isn't an PCE Session, the implementation will shutdown.
+- Own ABNOController implementation needs a PCE Session, if there isn't a PCE Session, the implementation will shutdown.
 - To start ABNOController is required a .xml file with some ABNO parameters, a example of .xml file you could show in the end of this readme.
 
 
