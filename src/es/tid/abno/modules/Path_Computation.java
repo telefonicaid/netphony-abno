@@ -88,95 +88,8 @@ public class Path_Computation extends Thread
 			req.setBandwidth(gb);	
 
 			// Adding GeneralizedEndPoints
-			GeneralizedEndPoints endP = new GeneralizedEndPoints();
-			
-			EndPoint sourceEP=new EndPoint();
-			EndPoint destEP=new EndPoint();
-
-			//Check if Nodes ID are IP or DataPathId
-			
-			//String example1 = "192.168.20.1";
-			//String example2 = "00:00:00:05:00:00:00:08";
-			String pattern_datapathid = "([0-9]{2}:){7}([0-9]{2})";
-			String pattern_IPv4 = "([0-9]{1,3}\\.){3}([0-9]{1,3})";
-		    
-			if (SourceString.matches(pattern_IPv4) && DestString.matches(pattern_IPv4)){
-		    	System.out.println("jm Es IP match");
-
-				Inet4Address ipSource = (Inet4Address) Inet4Address.getByName(SourceString);
-				Inet4Address ipDest = (Inet4Address) Inet4Address.getByName(DestString);
-				
-				// Check if there are Interfaces or not
-				if (srcIntf>0 && dstIntf>0 ){
-					// There are Interfaces in the Request
-					log.info("THERE ARE INTERFACES IN THE REQUEST");
-					UnnumberedEndpointTLV sourceUnnumberedEndpointTLV = new UnnumberedEndpointTLV();
-					UnnumberedEndpointTLV destUnnumberedEndpointTLV = new UnnumberedEndpointTLV();
-					
-					sourceUnnumberedEndpointTLV.setIPv4address(ipSource);
-					sourceUnnumberedEndpointTLV.setIfID(srcIntf);
-					
-					destUnnumberedEndpointTLV.setIPv4address(ipDest);
-					destUnnumberedEndpointTLV.setIfID(dstIntf);
-					
-					sourceEP.setUnnumberedEndpoint(sourceUnnumberedEndpointTLV);
-					destEP.setUnnumberedEndpoint(destUnnumberedEndpointTLV);	
-					
-				} else {
-					// There are no Interfaces in the Request
-					log.info("THERE ARE NO INTERFACES IN THE REQUEST");
-					EndPointIPv4TLV sourceEndPointIPv4TLV = new EndPointIPv4TLV();
-					EndPointIPv4TLV destEndPointIPv4TLV = new EndPointIPv4TLV();
-					
-					sourceEndPointIPv4TLV.setIPv4address(ipSource);
-					destEndPointIPv4TLV.setIPv4address(ipDest);
-					
-					sourceEP.setEndPointIPv4TLV(sourceEndPointIPv4TLV);
-					destEP.setEndPointIPv4TLV(destEndPointIPv4TLV);	
-					
-				}		
-				
-			}
-		    else if (SourceString.matches(pattern_datapathid) && DestString.matches(pattern_datapathid)){
-		    	System.out.println("jm Es una DPID Match");
-		    	
-		    	// Check if there are Interfaces or not
-				if (srcIntf>0 && dstIntf>0 ){
-					// There are Interfaces in the Request
-					EndPointUnnumberedDataPathTLV sourceUnnumberedDataPathTLV = new EndPointUnnumberedDataPathTLV();
-					EndPointUnnumberedDataPathTLV destUnnumberedDataPathTLV = new EndPointUnnumberedDataPathTLV();
-					
-					sourceUnnumberedDataPathTLV.setSwitchID(SourceString);
-					sourceUnnumberedDataPathTLV.setIfID(srcIntf);
-					destUnnumberedDataPathTLV.setSwitchID(DestString);
-					destUnnumberedDataPathTLV.setIfID(dstIntf);
-		
-					sourceEP.setEndPointUnnumberedDataPathTLV(sourceUnnumberedDataPathTLV);
-					destEP.setEndPointUnnumberedDataPathTLV(destUnnumberedDataPathTLV);
-					
-					
-				} else {
-					// There are no Interfaces in the Request
-					EndPointDataPathTLV sourceDataPathTLV = new EndPointDataPathTLV();
-					EndPointDataPathTLV destDataPathTLV = new EndPointDataPathTLV();
-					
-					sourceDataPathTLV.setSwitchID(SourceString);
-					destDataPathTLV.setSwitchID(DestString);
-					
-					sourceEP.setEndPointDataPathTLV(sourceDataPathTLV);
-					destEP.setEndPointDataPathTLV(destDataPathTLV);	
-				}
-		    	
-		    }
-		    else{
-		    	log.info("The type of Source and Destination EndPoint is not defined");
-		    }
-			
-			P2PEndpoints p2pep=new P2PEndpoints();
-			p2pep.setSourceEndPoints(sourceEP);
-			p2pep.setDestinationEndPoints(destEP);			
-
-			endP.setP2PEndpoints(p2pep);
+			GeneralizedEndPoints endP = new GeneralizedEndPoints();		
+			endP = createGeneralizedEndpoints(SourceString, srcIntf, DestString, dstIntf);
 			req.setEndPoints(endP);
 			log.info("req:: "+req.getEndPoints().toString());
 
@@ -255,86 +168,8 @@ public class Path_Computation extends Thread
 			// Adding GeneralizedEndPoints
 			GeneralizedEndPoints endP = new GeneralizedEndPoints();
 			
-			EndPoint sourceEP=new EndPoint();
-			EndPoint destEP=new EndPoint();
-		    
-			if (SourceString.matches(pattern_IPv4) && DestString.matches(pattern_IPv4)){
-		    	System.out.println("jm Es IP match");
-
-				Inet4Address ipSource = (Inet4Address) Inet4Address.getByName(SourceString);
-				Inet4Address ipDest = (Inet4Address) Inet4Address.getByName(DestString);
-				
-				// Check if there are Interfaces or not
-				if (srcIntf>0 && dstIntf>0 ){
-					// There are Interfaces in the Request
-					log.info("THERE ARE INTERFACES IN THE REQUEST");
-					UnnumberedEndpointTLV sourceUnnumberedEndpointTLV = new UnnumberedEndpointTLV();
-					UnnumberedEndpointTLV destUnnumberedEndpointTLV = new UnnumberedEndpointTLV();
-					
-					sourceUnnumberedEndpointTLV.setIPv4address(ipSource);
-					sourceUnnumberedEndpointTLV.setIfID(srcIntf);
-					
-					destUnnumberedEndpointTLV.setIPv4address(ipDest);
-					destUnnumberedEndpointTLV.setIfID(dstIntf);
-					
-					sourceEP.setUnnumberedEndpoint(sourceUnnumberedEndpointTLV);
-					destEP.setUnnumberedEndpoint(destUnnumberedEndpointTLV);	
-					
-				} else {
-					// There are no Interfaces in the Request
-					log.info("THERE ARE NO INTERFACES IN THE REQUEST");
-					EndPointIPv4TLV sourceEndPointIPv4TLV = new EndPointIPv4TLV();
-					EndPointIPv4TLV destEndPointIPv4TLV = new EndPointIPv4TLV();
-					
-					sourceEndPointIPv4TLV.setIPv4address(ipSource);
-					destEndPointIPv4TLV.setIPv4address(ipDest);
-					
-					sourceEP.setEndPointIPv4TLV(sourceEndPointIPv4TLV);
-					destEP.setEndPointIPv4TLV(destEndPointIPv4TLV);	
-					
-				}		
-				
-			}
-		    else if (SourceString.matches(pattern_datapathid) && DestString.matches(pattern_datapathid)){
-		    	System.out.println("jm Es una DPID Match");
-		    	
-		    	// Check if there are Interfaces or not
-				if (srcIntf>0 && dstIntf>0 ){
-					// There are Interfaces in the Request
-					EndPointUnnumberedDataPathTLV sourceUnnumberedDataPathTLV = new EndPointUnnumberedDataPathTLV();
-					EndPointUnnumberedDataPathTLV destUnnumberedDataPathTLV = new EndPointUnnumberedDataPathTLV();
-					
-					sourceUnnumberedDataPathTLV.setSwitchID(SourceString);
-					sourceUnnumberedDataPathTLV.setIfID(srcIntf);
-					destUnnumberedDataPathTLV.setSwitchID(DestString);
-					destUnnumberedDataPathTLV.setIfID(dstIntf);
-		
-					sourceEP.setEndPointUnnumberedDataPathTLV(sourceUnnumberedDataPathTLV);
-					destEP.setEndPointUnnumberedDataPathTLV(destUnnumberedDataPathTLV);
-					
-					
-				} else {
-					// There are no Interfaces in the Request
-					EndPointDataPathTLV sourceDataPathTLV = new EndPointDataPathTLV();
-					EndPointDataPathTLV destDataPathTLV = new EndPointDataPathTLV();
-					
-					sourceDataPathTLV.setSwitchID(SourceString);
-					destDataPathTLV.setSwitchID(DestString);
-					
-					sourceEP.setEndPointDataPathTLV(sourceDataPathTLV);
-					destEP.setEndPointDataPathTLV(destDataPathTLV);	
-				}
-		    	
-		    }
-		    else{
-		    	log.info("The type of Source and Destination EndPoint is not defined");
-		    }
+			endP = createGeneralizedEndpoints(SourceString, srcIntf, DestString, dstIntf);
 			
-			P2PEndpoints p2pep=new P2PEndpoints();
-			p2pep.setSourceEndPoints(sourceEP);
-			p2pep.setDestinationEndPoints(destEP);			
-
-			endP.setP2PEndpoints(p2pep);
 			req.setEndPoints(endP);
 			log.info("req:: "+req.getEndPoints().toString());
 			
@@ -780,6 +615,109 @@ public class Path_Computation extends Thread
 
 	public static void setDEFAULT_MAC(String dEFAULT_MAC) {
 		DEFAULT_MAC = dEFAULT_MAC;
+	}
+	
+	public GeneralizedEndPoints createGeneralizedEndpoints(String SourceString, int srcIntf, String DestString, int dstIntf ){
+		
+		GeneralizedEndPoints endP = new GeneralizedEndPoints();
+		
+		//Check if Nodes ID are IP or DataPathId
+		
+		//String example1 = "192.168.20.1";
+		//String example2 = "00:00:00:05:00:00:00:08";
+		String pattern_datapathid = "([0-9]{2}:){7}([0-9]{2})";
+		String pattern_IPv4 = "([0-9]{1,3}\\.){3}([0-9]{1,3})";
+		
+		EndPoint sourceEP=new EndPoint();
+		EndPoint destEP=new EndPoint();
+	    try{
+	    	if (SourceString.matches(pattern_IPv4) && DestString.matches(pattern_IPv4)){
+		    	System.out.println("jm Es IP match");
+
+				Inet4Address ipSource = (Inet4Address) Inet4Address.getByName(SourceString);
+				Inet4Address ipDest = (Inet4Address) Inet4Address.getByName(DestString);
+				
+				// Check if there are Interfaces or not
+				if (srcIntf>0 && dstIntf>0 ){
+					// There are Interfaces in the Request
+					log.info("THERE ARE INTERFACES IN THE REQUEST");
+					UnnumberedEndpointTLV sourceUnnumberedEndpointTLV = new UnnumberedEndpointTLV();
+					UnnumberedEndpointTLV destUnnumberedEndpointTLV = new UnnumberedEndpointTLV();
+					
+					sourceUnnumberedEndpointTLV.setIPv4address(ipSource);
+					sourceUnnumberedEndpointTLV.setIfID(srcIntf);
+					
+					destUnnumberedEndpointTLV.setIPv4address(ipDest);
+					destUnnumberedEndpointTLV.setIfID(dstIntf);
+					
+					sourceEP.setUnnumberedEndpoint(sourceUnnumberedEndpointTLV);
+					destEP.setUnnumberedEndpoint(destUnnumberedEndpointTLV);	
+					
+				} else {
+					// There are no Interfaces in the Request
+					log.info("THERE ARE NO INTERFACES IN THE REQUEST");
+					EndPointIPv4TLV sourceEndPointIPv4TLV = new EndPointIPv4TLV();
+					EndPointIPv4TLV destEndPointIPv4TLV = new EndPointIPv4TLV();
+					
+					sourceEndPointIPv4TLV.setIPv4address(ipSource);
+					destEndPointIPv4TLV.setIPv4address(ipDest);
+					
+					sourceEP.setEndPointIPv4TLV(sourceEndPointIPv4TLV);
+					destEP.setEndPointIPv4TLV(destEndPointIPv4TLV);	
+					
+				}		
+				
+			}
+		    else if (SourceString.matches(pattern_datapathid) && DestString.matches(pattern_datapathid)){
+		    	System.out.println("jm Es una DPID Match");
+		    	
+		    	// Check if there are Interfaces or not
+				if (srcIntf>0 && dstIntf>0 ){
+					// There are Interfaces in the Request
+					EndPointUnnumberedDataPathTLV sourceUnnumberedDataPathTLV = new EndPointUnnumberedDataPathTLV();
+					EndPointUnnumberedDataPathTLV destUnnumberedDataPathTLV = new EndPointUnnumberedDataPathTLV();
+					
+					sourceUnnumberedDataPathTLV.setSwitchID(SourceString);
+					sourceUnnumberedDataPathTLV.setIfID(srcIntf);
+					destUnnumberedDataPathTLV.setSwitchID(DestString);
+					destUnnumberedDataPathTLV.setIfID(dstIntf);
+		
+					sourceEP.setEndPointUnnumberedDataPathTLV(sourceUnnumberedDataPathTLV);
+					destEP.setEndPointUnnumberedDataPathTLV(destUnnumberedDataPathTLV);
+					
+					
+				} else {
+					// There are no Interfaces in the Request
+					EndPointDataPathTLV sourceDataPathTLV = new EndPointDataPathTLV();
+					EndPointDataPathTLV destDataPathTLV = new EndPointDataPathTLV();
+					
+					sourceDataPathTLV.setSwitchID(SourceString);
+					destDataPathTLV.setSwitchID(DestString);
+					
+					sourceEP.setEndPointDataPathTLV(sourceDataPathTLV);
+					destEP.setEndPointDataPathTLV(destDataPathTLV);	
+				}
+		    	
+		    }
+		    else{
+		    	log.info("The type of Source and Destination EndPoint is not defined");
+		    }
+			
+			P2PEndpoints p2pep=new P2PEndpoints();
+			p2pep.setSourceEndPoints(sourceEP);
+			p2pep.setDestinationEndPoints(destEP);			
+
+			endP.setP2PEndpoints(p2pep);
+			
+			return endP;
+	    	
+	    }
+		catch (Exception e) {
+			this.log.info(UtilsFunctions.exceptionToString(e));
+			return null;
+		}
+	    
+		
 	}
 	
 	

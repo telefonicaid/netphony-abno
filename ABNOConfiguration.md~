@@ -1,6 +1,6 @@
-# ABNOConfiguration.xml
+# ABNOConfiguration.md
 
-## Example of .xml code
+## Example of ABNOConfiguration.xml code
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
