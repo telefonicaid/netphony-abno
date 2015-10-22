@@ -99,7 +99,7 @@ public class ABNOParameters
                 policyread.setWfName(getCharacterDataFromElement(wfNameElement));
                 
                 //MediaChannel
-                if (parametersPolicy.getElementsByTagName("MediaChannel")!=null){
+                if (parametersPolicy.getElementsByTagName("MediaChannel").getLength()!=0){
                 	NodeList nodes_MediaChannel = parametersPolicy.getElementsByTagName("MediaChannel");
                     Element mediaChannelParameters = (Element)nodes_MediaChannel.item(0);
                     MediaChannel mediaChannelread = new MediaChannel();
