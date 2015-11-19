@@ -617,10 +617,9 @@ public class Path_Computation extends Thread
 		DEFAULT_MAC = dEFAULT_MAC;
 	}
 	
-	public GeneralizedEndPoints createGeneralizedEndpoints(String SourceString, int srcIntf, String DestString, int dstIntf ){
+	public static GeneralizedEndPoints createGeneralizedEndpoints(String SourceString, int srcIntf, String DestString, int dstIntf ){
 		
 		GeneralizedEndPoints endP = new GeneralizedEndPoints();
-		
 		//Check if Nodes ID are IP or DataPathId
 		
 		//String example1 = "192.168.20.1";
@@ -632,15 +631,14 @@ public class Path_Computation extends Thread
 		EndPoint destEP=new EndPoint();
 	    try{
 	    	if (SourceString.matches(pattern_IPv4) && DestString.matches(pattern_IPv4)){
-		    	System.out.println("jm Es IP match");
-
+		    	
 				Inet4Address ipSource = (Inet4Address) Inet4Address.getByName(SourceString);
 				Inet4Address ipDest = (Inet4Address) Inet4Address.getByName(DestString);
 				
 				// Check if there are Interfaces or not
 				if (srcIntf>0 && dstIntf>0 ){
 					// There are Interfaces in the Request
-					log.info("THERE ARE INTERFACES IN THE REQUEST");
+					//log.info("THERE ARE INTERFACES IN THE REQUEST");
 					UnnumberedEndpointTLV sourceUnnumberedEndpointTLV = new UnnumberedEndpointTLV();
 					UnnumberedEndpointTLV destUnnumberedEndpointTLV = new UnnumberedEndpointTLV();
 					
@@ -655,7 +653,7 @@ public class Path_Computation extends Thread
 					
 				} else {
 					// There are no Interfaces in the Request
-					log.info("THERE ARE NO INTERFACES IN THE REQUEST");
+					//log.info("THERE ARE NO INTERFACES IN THE REQUEST");
 					EndPointIPv4TLV sourceEndPointIPv4TLV = new EndPointIPv4TLV();
 					EndPointIPv4TLV destEndPointIPv4TLV = new EndPointIPv4TLV();
 					
@@ -669,7 +667,6 @@ public class Path_Computation extends Thread
 				
 			}
 		    else if (SourceString.matches(pattern_datapathid) && DestString.matches(pattern_datapathid)){
-		    	System.out.println("jm Es una DPID Match");
 		    	
 		    	// Check if there are Interfaces or not
 				if (srcIntf>0 && dstIntf>0 ){
@@ -700,7 +697,7 @@ public class Path_Computation extends Thread
 		    	
 		    }
 		    else{
-		    	log.info("The type of Source and Destination EndPoint is not defined");
+		    	//log.info("The type of Source and Destination EndPoint is not defined");
 		    }
 			
 			P2PEndpoints p2pep=new P2PEndpoints();
@@ -713,7 +710,7 @@ public class Path_Computation extends Thread
 	    	
 	    }
 		catch (Exception e) {
-			this.log.info(UtilsFunctions.exceptionToString(e));
+			//this.log.info(UtilsFunctions.exceptionToString(e));
 			return null;
 		}
 	    
