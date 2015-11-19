@@ -31,3 +31,14 @@
 	</PCEParameterslist>
 </config>
 ```
+
+## Parameters
+- <PCEParameters>: Some PCE parameters
+- <PCEMode>:
+- <Policy>: Specify some parameters in a workflow
+- <WFName>: Workflow name
+- <PCEAddress>: The PCE IP Address
+- <MediaChannel>
+- <OFCode>
+- <L0PCECapabilities>
+- <Instantiation>: true (Send Initiate to PCE), false (Send Initiate to Provisioning Manager).
