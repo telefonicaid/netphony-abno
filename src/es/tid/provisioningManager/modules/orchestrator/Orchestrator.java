@@ -25,12 +25,12 @@ import es.tid.provisioningManager.modules.ProvisioningManagerParams;
 import es.tid.provisioningManager.modules.dispatcher.COPModeDispatcher;
 import es.tid.provisioningManager.modules.dispatcher.Dispatcher;
 import es.tid.provisioningManager.modules.dispatcher.InfoDispatcher;
+import es.tid.provisioningManager.modules.topologyModule.TopologyModuleParams;
 import tid.provisioningManager.modules.comms.CommsToPCE;
 import tid.provisioningManager.modules.comms.CommsToTM;
 //import tid.provisioningManager.modules.dispatcher.Dispatcher;
 import tid.provisioningManager.modules.dispatcher.DispatcherQueue;
 import tid.provisioningManager.modules.dispatcher.LSPWriter;
-import tid.provisioningManager.modules.topologyModule.TopologyModuleParams;
 import tid.provisioningManager.objects.ChangeRoute;
 import tid.provisioningManager.objects.ConfigureLSPpcep;
 import tid.provisioningManager.objects.CreateIPLink;
@@ -38,14 +38,14 @@ import tid.provisioningManager.objects.CreateLSP;
 import tid.provisioningManager.objects.CreateLightPath;
 import tid.provisioningManager.objects.CreateMulticast;
 import tid.provisioningManager.objects.OFObject;
-import tid.provisioningManager.objects.RouterInfoPM;
-import tid.provisioningManager.objects.Topology;
 import tid.provisioningManager.objects.UpdateIpLink;
 import tid.provisioningManager.objects.UpdateL0Link;
+import es.tid.provisioningManager.objects.RouterInfoPM;
+import es.tid.provisioningManager.objects.Topology;
 import es.tid.provisioningManager.objects.lsps.LSP;
+import es.tid.provisioningManager.utilities.PMUtilities;
 import tid.provisioningManager.objects.openflow.PushFlowController;
 import tid.provisioningManager.objects.openflow.StaticFlow;
-import tid.provisioningManager.utilities.PMUtilities;
 import tid.topologyModule.writer.gson.GsonClient;
 
 import com.google.gson.Gson;
@@ -192,6 +192,7 @@ public class Orchestrator  extends Thread{
 			}
 		}else log.info("pcepInitiate null");
 		
+		sendReport();
 		log.info("Orchestrator ENDs.");
 	}
 	
@@ -515,7 +516,7 @@ public class Orchestrator  extends Thread{
 
 		Topology grafo = new Topology();
 		try{
-			grafo = gson.fromJson(response, tid.provisioningManager.objects.Topology.class);
+			grafo = gson.fromJson(response, es.tid.provisioningManager.objects.Topology.class);
 		}catch (Exception e)
 		{
 			e.printStackTrace();
@@ -2335,42 +2336,42 @@ public class Orchestrator  extends Thread{
 		else return null;
 
 	}
-//
-//	private void sendReport(){		
-//		log.info("Sending Report to ABNO or VNTM");
-//		try{
-//			Thread.currentThread().sleep(6000);
-//		}catch (Exception e){
-//			e.printStackTrace();
-//		}
-//		PCEPReport rpt= new PCEPReport();
-//		rpt.setStateReportList(new LinkedList<StateReport>());
-//		rpt.getStateReportList().add(new StateReport());
-//		rpt.getStateReportList().get(0).setLSP(pcepInitiate.getPcepIntiatedLSPList().get(0).getLsp());
-//		rpt.getStateReportList().get(0).setSRP(pcepInitiate.getPcepIntiatedLSPList().get(0).getRsp());
-//		rpt.getStateReportList().get(0).getLSP().setLspId(oPcounter.get());
-//		rpt.getStateReportList().get(0).setPath(new Path());
-//		rpt.getStateReportList().get(0).getPath().seteRO(pcepInitiate.getPcepIntiatedLSPList().get(0).getEro());
-//
-//		try {
-//			rpt.encode();
-//		} catch (PCEPProtocolViolationException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		if (out== null)
-//			System.out.println("No se crea bien el out");
-//		else{
-//			try {
-//				this.out.write(rpt.getBytes());
-//				this.out.flush();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-//	}
-//
+
+	private void sendReport(){		
+		log.info("Sending Report to ABNO or VNTM");
+		try{
+			Thread.currentThread().sleep(6000);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		PCEPReport rpt= new PCEPReport();
+		rpt.setStateReportList(new LinkedList<StateReport>());
+		rpt.getStateReportList().add(new StateReport());
+		rpt.getStateReportList().get(0).setLSP(pcepInitiate.getPcepIntiatedLSPList().get(0).getLsp());
+		rpt.getStateReportList().get(0).setSRP(pcepInitiate.getPcepIntiatedLSPList().get(0).getRsp());
+		rpt.getStateReportList().get(0).getLSP().setLspId(oPcounter.get());
+		rpt.getStateReportList().get(0).setPath(new Path());
+		rpt.getStateReportList().get(0).getPath().seteRO(pcepInitiate.getPcepIntiatedLSPList().get(0).getEro());
+
+		try {
+			rpt.encode();
+		} catch (PCEPProtocolViolationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (out== null)
+			System.out.println("No se crea bien el out");
+		else{
+			try {
+				this.out.write(rpt.getBytes());
+				this.out.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
 //	private void sendReportNoInfo()
 //	{
 //		PCEPReport rpt= new PCEPReport();

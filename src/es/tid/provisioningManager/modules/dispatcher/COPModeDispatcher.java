@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.logging.Logger;
 
 import es.tid.rsvp.objects.subobjects.EROSubobject;
-import tid.provisioningManager.objects.CreateLightPath;
 
 public class COPModeDispatcher {
 	
@@ -18,48 +17,7 @@ public class COPModeDispatcher {
 		
 		log.info("#### Launching COPMode dispathcer...");
 		
-		
-		//Some parameters to StraussEmulatedCOP
-		String tpString = "";
-		
-		if (infoDispatcher.getRouterType().equals("LIGHTNESS") || infoDispatcher.getRouterType().equals("UNIVBRIS")){
-			//{'OSNR':'14.0','estimatedPLR':'0.1'}
-			tpString = "\"OSNR\":\"14.0\",\"estimatedPLR\":\"0.1\"";
-		}else if (infoDispatcher.getRouterType().equals("CTTC")){
-			tpString = "\"OSNR\":\"14.0\"";
-			//{'OSNR':'14.0'}
-		}else if ( infoDispatcher.getRouterType().equals("KDDI")){
-			tpString = "\"estimatedPLR\":\"0.1\"";
-			//{'estimatedPLR':'0.1'}
-		}
-		
-		
-		//callId
-		int callId = 1;
-		if (infoDispatcher.getRouterType().equals("LIGHTNESS")){
-			callId=10;
-		}else if ( infoDispatcher.getRouterType().equals("KDDI")){
-			callId=11;
-		}else if (infoDispatcher.getRouterType().equals("UNIVBRIS")){
-			callId=12;
-		}else if (infoDispatcher.getRouterType().equals("CTTC")){
-			callId=13;
-		}
-		
-		//Parameteres to send curl
-		//ControllerIP + Controller port
-		//callID
-		//aEnd
-			//clp.getSrcDpid()
-			//clp.getSrcportname()
-		//zend
-			//\"routerId\":\"" + clp.getDstDpid() + "\"
-			//\"interfaceId\":\"" + clp.getDstportname() + "\"
-			//\"endpointId\":\""+clp.getRouterType()+"_"+clp.getDstportname()+"\
-		//trafficParams
-		//{"+tpString+"},\"transportLayer\":{\"layer\":\"ethernet\"}
-		
-		
+		String callId = "1";
 		String aEnd = null;
 		String aEnd_routerId = infoDispatcher.getSourceNode();
 		String aEnd_interfaceId = ""+infoDispatcher.getSourceIntf();
@@ -124,9 +82,9 @@ public class COPModeDispatcher {
 		}
 				
 		
-		String tparams = "\"trafficparams\": {\"latency\":100,\"reservedBandwidth\":100000000}";
+		String tparams = "\"trafficParams\": {\"latency\":100,\"reservedBandwidth\":100000000}";
 		
-		String tlayer = "\"transportlayer\": {\"layer\":\"ethernet\", \"direction\":\"bidir\"}";
+		String tlayer = "\"transportLayer\": {\"layer\":\"ethernet\", \"direction\":\"bidir\"}";
 		
 		
 		String jsonCOP = "{\"callId\":\""+callId+"\","+aEnd+","+zEnd+",";
