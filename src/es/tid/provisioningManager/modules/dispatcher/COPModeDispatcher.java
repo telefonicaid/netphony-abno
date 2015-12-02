@@ -82,17 +82,17 @@ public class COPModeDispatcher {
 		}
 				
 		
-		String tparams = "\"trafficParams\": {\"latency\":100,\"reservedBandwidth\":100000000}";
+		String tparams = "\"trafficParams\":{\"latency\":100,\"reservedBandwidth\":100000000}";
 		
-		String tlayer = "\"transportLayer\": {\"layer\":\"ethernet\", \"direction\":\"bidir\"}";
+		String tlayer = "\"transportLayer\":{\"layer\":\"ethernet\", \"direction\":\"bidir\"}";
 		
 		
 		String jsonCOP = "{\"callId\":\""+callId+"\","+aEnd+","+zEnd+",";
 		if (path!=null) jsonCOP = jsonCOP + path + ",";
 		jsonCOP = jsonCOP + tparams+","+tlayer+"}";
 		
-		String curl_string = "curl -X POST -H \"Content-type:application/json\" -u admin:pswd1 http://"+ infoDispatcher.getControllerIP() +":"+ infoDispatcher.getControllerPort() +"/restconf/config/calls/call/"+callId+"/ -d '"+jsonCOP+"'";
-		
+		String curl_string = "time curl -X POST -H \"Content-type:application/json\" -u admin:pswd1 http://"+ infoDispatcher.getControllerIP() +":"+ infoDispatcher.getControllerPort() +"/restconf/config/calls/call/"+callId+"/ -d '"+jsonCOP+"'";
+		//String curl_string = "date";
 		//log.info("Sending curl: "+ curl_string);
 			
 		String[] curl_array = new String[] {

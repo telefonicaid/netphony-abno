@@ -2339,11 +2339,11 @@ public class Orchestrator  extends Thread{
 
 	private void sendReport(){		
 		log.info("Sending Report to ABNO or VNTM");
-		try{
-			Thread.currentThread().sleep(6000);
-		}catch (Exception e){
-			e.printStackTrace();
-		}
+//		try{
+//			Thread.currentThread().sleep(6000);
+//		}catch (Exception e){
+//			e.printStackTrace();
+//		}
 		PCEPReport rpt= new PCEPReport();
 		rpt.setStateReportList(new LinkedList<StateReport>());
 		rpt.getStateReportList().add(new StateReport());

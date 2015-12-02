@@ -1,6 +1,7 @@
 package es.tid.abno.modules.workflows;
 
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.LinkedList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +27,7 @@ import tid.ipnms.json.JSONObject;
  * 
  */
 
-public class L0ProvisioningWF extends Workflow
+public class L0ProvisioningCOPWF extends WorkflowCOP
 {
 	public static String add_mult_vlan = "add_mult_vlan";
 	private String operation;
@@ -44,7 +45,7 @@ public class L0ProvisioningWF extends Workflow
 	
 
 
-	public L0ProvisioningWF(HttpServletRequest request, HttpServletResponse response, LinkedList<Path_Computation> path_Computationlist, ABNOParameters params, HashMap<Integer, OpTable> oPtable) 
+	public L0ProvisioningCOPWF(Hashtable<String, String> request, String response, LinkedList<Path_Computation> path_Computationlist, ABNOParameters params, HashMap<Integer, OpTable> oPtable) 
 	{
 		super(request, response, path_Computationlist, params, oPtable);
 	}
@@ -52,23 +53,31 @@ public class L0ProvisioningWF extends Workflow
 	@Override
 	public void handleRequest() 
 	{
+		
+		//Get parameters from request
+		String idOperation = request.get("ID_Operation");
+		this.operation = request.get("Operation");
+		this.excludeNode = request.get("Exclude_Node");
+		this.OFCode=request.get("OF");
+		if (request.get("m")!=null){
+			this.m=Integer.parseInt(request.get("m"));
+		}else this.m=-1;
+		log.info("jm m: "+m);
+		this.ero = request.get("ERO");
+		
+		String remoteAddr = request.get("remoteAddr");
+		String bw=request.get("Bandwidth");
+		
+		
 		boolean delete=false;
 		boolean update=false;
 		float bandwidth=0;
 		long time_start = System.currentTimeMillis();
 		System.out.println("<REQ_L0PROV> "+time_start);
 		
-		String idOperation = request.getParameter("ID_Operation");
-		this.operation = request.getParameter("Operation");
-		this.excludeNode = request.getParameter("Exclude_Node");
-		this.OFCode=request.getParameter("OF");
+		response = "probando response denetro del workwlow";
 		
-		if (request.getParameter("m")!=null){
-			this.m=Integer.parseInt(request.getParameter("m"));
-		}else this.m=-1;
-		log.info("jm m: "+m);
 		
-		this.ero = request.getParameter("ERO");
 		
 		if (this.operation.equals("update")){
 			
@@ -80,18 +89,18 @@ public class L0ProvisioningWF extends Workflow
 			
 		} else{//for add and del
 			
-			this.source = request.getParameter("Source_Node");
-			this.destination = request.getParameter("Destination_Node");
+			this.source = request.get("Source_Node");
+			this.destination = request.get("Destination_Node");
 			
 			
 			
-			this.OFCode=request.getParameter("OF");
+			this.OFCode=request.get("OF");
 
 
 
-			if (request.getParameter("source_interface")!=null && request.getParameter("destination_interface")!=null){
-				source_interface = Integer.parseInt(request.getParameter("source_interface"));
-				destination_interface = Integer.parseInt(request.getParameter("destination_interface"));
+			if (request.get("source_interface")!=null && request.get("destination_interface")!=null){
+				source_interface = Integer.parseInt(request.get("source_interface"));
+				destination_interface = Integer.parseInt(request.get("destination_interface"));
 			}
 			
 		}
@@ -106,7 +115,7 @@ public class L0ProvisioningWF extends Workflow
 			idOperation=String.valueOf(serviceCounter.incrementAndGet());
 		}
 
-		String bw=request.getParameter("Bandwidth");
+		
 
 		if (idOperation!=null)
 			if (check4Services(idOperation))
@@ -217,7 +226,7 @@ public class L0ProvisioningWF extends Workflow
 			e.printStackTrace();
 		}
 
-		replyMessage(jsonParams.toString());
+		response = jsonParams.toString();
 
 		long time_end = System.currentTimeMillis();
 		System.out.println("<RESP_L0PROV> "+time_end);
@@ -228,7 +237,7 @@ public class L0ProvisioningWF extends Workflow
 					idLSP = ((PCEPReport) responseToInitiate).getStateReportList().get(0).getLSP().getLspId();
 				}
 			}
-			this.oPtable.put(Integer.parseInt(idOperation), new OpTable(request.getRemoteAddr(),params.getPMAddress(), String.valueOf(params.getPcepPortPM()), idLSP, "L0ProvisioningWF"));
+			this.oPtable.put(Integer.parseInt(idOperation), new OpTable(remoteAddr,params.getPMAddress(), String.valueOf(params.getPcepPortPM()), idLSP, "L0ProvisioningWF"));
 		}else{
 			this.oPtable.remove(Integer.parseInt(idOperation));
 		}
@@ -271,7 +280,7 @@ public class L0ProvisioningWF extends Workflow
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			replyMessage(jsonParams.toString());
+			response = jsonParams.toString();
 			return true;
 		}
 
@@ -294,7 +303,7 @@ public class L0ProvisioningWF extends Workflow
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			replyMessage(jsonParams.toString());
+			response = jsonParams.toString();
 			return true;
 		}
 
@@ -318,7 +327,7 @@ public class L0ProvisioningWF extends Workflow
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			replyMessage(jsonParams.toString());
+			response = jsonParams.toString();
 			return true;
 		}
 		return false;
