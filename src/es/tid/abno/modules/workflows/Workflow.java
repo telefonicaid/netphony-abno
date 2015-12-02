@@ -1,4 +1,4 @@
-package es.tid.abno.modules.workflow;
+package es.tid.abno.modules.workflows;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

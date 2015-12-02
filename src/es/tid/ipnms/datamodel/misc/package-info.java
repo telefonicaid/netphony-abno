@@ -5,4 +5,4 @@
  * @author jm
  *
  */
-package es.tid.abno.modules.workflow;
+package es.tid.ipnms.datamodel.misc;

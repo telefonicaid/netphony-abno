@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import es.tid.abno.modules.database.OpTable;
-//import es.tid.abno.modules.workflow.Workflow;
-import tid.abno.modules.workflows.Workflow;
+import es.tid.abno.modules.workflows.Workflow;
+//import tid.abno.modules.workflows.Workflow;
 import es.tid.pce.pcep.PCEPProtocolViolationException;
 import es.tid.pce.pcep.messages.PCEPMessageTypes;
 import es.tid.pce.pcep.messages.PCEPResponse;
@@ -87,7 +87,7 @@ public class AbnoServlet extends HttpServlet {
 		
 		try 
 		{
-			Class<?> act = Class.forName("tid.abno.modules.workflows."+workflowParam);
+			Class<?> act = Class.forName("es.tid.abno.modules.workflows."+workflowParam);
 			
 			Class[] cArg = new Class[5];
 			
