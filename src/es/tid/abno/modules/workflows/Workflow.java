@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import es.tid.abno.modules.ABNOParameters;
 import es.tid.abno.modules.Path_Computation;
 import es.tid.abno.modules.database.OpTable;
+import es.tid.pce.client.PCCPCEPSession;
 import es.tid.pce.pcep.constructs.GeneralizedBandwidthSSON;
 import es.tid.pce.pcep.constructs.PCEPIntiatedLSP;
 import es.tid.pce.pcep.constructs.UpdateRequest;
@@ -186,6 +187,41 @@ public abstract class Workflow
 		System.out.println("-----------------------------------------------------------------");
 	}
 
+	
+	protected PCEPInitiate delete(int id)
+	{
+		PCEPInitiate pcepInit = new PCEPInitiate();
+
+		//For the time being, no need to put anything here
+		SRP rsp = new SRP();
+		rsp.setrFlag(true);
+		
+		rsp.setSRP_ID_number(PCCPCEPSession.getNewReqIDCounter());
+
+		//For the time being, no need to put anything here
+		LSP lsp = new LSP();
+		lsp.setLspId(id);
+		
+		SymbolicPathNameTLV spn = new SymbolicPathNameTLV();
+		spn.setSymbolicPathNameID("IDEALIST".getBytes());
+		lsp.setSymbolicPathNameTLV_tlv(spn);	
+
+//		ExplicitRouteObject ero;
+//		ero = (pcepresponse.getResponse(0).getPath(0).geteRO());
+//				
+		PCEPIntiatedLSP pcepIntiatedLSP = new PCEPIntiatedLSP();
+		//pcepIntiatedLSP.setEro(ero);
+		pcepIntiatedLSP.setRsp(rsp);
+		pcepIntiatedLSP.setLsp(lsp);
+		
+		//pcepIntiatedLSP.setBandwidth((BandwidthRequested)pcepresponse.getResponse(0).getBandwidth()); //Asumo que este bw funciona. Revisar si falla.
+		
+		pcepInit.getPcepIntiatedLSPList().add(pcepIntiatedLSP);
+
+		return pcepInit;
+	}
+	
+	
 	protected PCEPInitiate responseTOinitiate(PCEPResponse pcepresponse, int m)
 	{
 		PCEPInitiate pcepInit = new PCEPInitiate();
@@ -259,6 +295,8 @@ public abstract class Workflow
 
 		//For the time being, no need to put anything here
 		SRP rsp = new SRP();
+		
+		
 
 		//For the time being, no need to put anything here
 		LSP lsp = new LSP();
@@ -285,6 +323,7 @@ public abstract class Workflow
 	protected PCEPMessage  callPCE(PCEPInitiate pcepInit) 
 	{
 		log.info("Call PCE");
+		log.info("INITIATE: "+ pcepInit.toString());
 		return path_Computationlist.getFirst().getCrm().initiate(pcepInit, 60000);
 					
 	}

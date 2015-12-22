@@ -156,10 +156,66 @@ public class L0ProvisioningWF extends Workflow
 			
 
 		
-		
+		log.info(" XXXX Before Delete");
 		if (delete){
+			
+			log.info(" XXXX Delete");
+			
+			log.info(" XXXX isPCEInstantiation: "+params.getPolicy().get("L0ProvisioningWF").getL0pceCapabilities().getInstantiation());
+			if (params.getPolicy().get("L0ProvisioningWF").getL0pceCapabilities().getInstantiation()==false){
+			
 			long id=this.oPtable.get(Integer.parseInt(idOperation)).getPCCoperationID();
 			callProvisioningManager(pcepResponsel0ML, this.source, this.destination,(float) bandwidth, delete, id);
+			
+			}else{
+				
+//				log.info(" XXXX Sending PCEP Initiate Delete to PCE");
+//				int id=(int)this.oPtable.get(Integer.parseInt(idOperation)).getPCCoperationID();
+//				//callProvisioningManager(pcepResponsel0ML, this.source, this.destination,(float) bandwidth, delete, id);
+//				log.info(" XXXX id: "+id);
+//				callPCE(delete(pcepResponsel0ML,id));
+//				log.info("Finish callPCE Delete");
+				
+				
+				
+				
+//				if (m!=-1){//MediaChannel
+//					//L0ProvisioningWF could be obtain throw request.getParameter("Operation_Type");
+//					oFcode= params.getPolicy().get("L0ProvisioningWF").getMediaChannel().getOfCode();
+//					pcepResponsel0ML = path_Computationlist.getFirst().calculateMediaChannelPath(source, destination, source_interface, destination_interface, m, oFcode);
+//					log.info("Finish calculatePath MediaChannel");
+//					
+//				}else if (bw!=null){
+//					log.info("Bandwith is: "+bw.toString());
+//					bandwidth=Float.parseFloat(bw);
+//					//pcepResponsel0ML = path_Computationlist.getFirst().calculatePath(source,ip_dest, bandwidth);
+//					pcepResponsel0ML = path_Computationlist.getFirst().calculatePath(source, destination, source_interface, destination_interface, bandwidth, oFcode,nodeExclude,portExclude);
+//					log.info("Finish calculatePath");
+//				}else{
+//					//Does not have Bandwidth parameter
+//					pcepResponsel0ML = path_Computationlist.getFirst().calculatePath(source,destination, 0);
+//				}
+				
+				
+				
+				//pcepResponsel0ML = path_Computationlist.getFirst().calculateMediaChannelPath(source, destination, source_interface, destination_interface, m, oFcode);
+				//pcepResponsel0ML = path_Computationlist.getFirst().calculatePath(source,destination, 0);
+				//log.info(" XXXX pcepResponsel0ML: "+pcepResponsel0ML);
+				log.info(" XXXX Sending PCEP Initiate Delete to PCE");
+				int id=(int)this.oPtable.get(Integer.parseInt(idOperation)).getPCCoperationID();
+				
+				log.info(" XXXX id: "+id);
+				PCEPInitiate del = delete(id);
+				
+				GeneralizedEndPoints endPointsInitiate = new GeneralizedEndPoints();
+				endPointsInitiate = Path_Computation.createGeneralizedEndpoints(source, source_interface, destination, destination_interface);
+				del.getPcepIntiatedLSPList().get(0).setEndPoint(endPointsInitiate);
+				log.info(" XXXX del: " +del.toString());
+				responseToInitiate=callPCE(del); 
+				log.info("Finish callPCE Delete");
+				
+			}
+		
 		}else if (this.operation.equals("update")){
 			
 			
@@ -230,7 +286,9 @@ public class L0ProvisioningWF extends Workflow
 			}
 			this.oPtable.put(Integer.parseInt(idOperation), new OpTable(request.getRemoteAddr(),params.getPMAddress(), String.valueOf(params.getPcepPortPM()), idLSP, "L0ProvisioningWF"));
 		}else{
+			log.info(" XXXX Else operation.equals('add')");
 			this.oPtable.remove(Integer.parseInt(idOperation));
+			log.info(" XXXX Finish remove");
 		}
 		
 		//update message
@@ -239,7 +297,7 @@ public class L0ProvisioningWF extends Workflow
 //		}else{
 //			this.oPtable.remove(Integer.parseInt(idOperation));
 //		}
-		log.info("jm ver gt pccoperationid"+this.oPtable.get(Integer.parseInt(idOperation)).getPCCoperationID());
+		//log.info("jm ver gt pccoperationid"+this.oPtable.get(Integer.parseInt(idOperation)).getPCCoperationID());
 		this.printOPTable();
 	}
 
