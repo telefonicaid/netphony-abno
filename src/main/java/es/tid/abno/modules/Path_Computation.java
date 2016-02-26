@@ -189,7 +189,7 @@ public class Path_Computation extends Thread
 					dpidxro.setDataPathID(ExcludeString);
 					xRONode.setDataPath(dpidxro);
 					eROSubobjectList.add(xRONode); 
-					XRO.setEROSubobjectList(eROSubobjectList);
+					XRO.setXROSubobjectList(eROSubobjectList);
 				}
 				req.setXro(XRO);
 				log.info("Path_Computation XRO:: "+req.getXro());
@@ -446,7 +446,7 @@ public class Path_Computation extends Thread
 			destEP.setEndPointDataPathTLV(destDataPathTLV);
 
 			P2PEndpoints p2pep=new P2PEndpoints();
-			p2pep.setSourceEndPoints(sourceEP);
+			p2pep.setSourceEndpoint(sourceEP);
 			p2pep.setDestinationEndPoints(destEP);			
 
 			endP.setP2PEndpoints(p2pep);
@@ -524,7 +524,7 @@ public class Path_Computation extends Thread
 			xRONode.setInterfaceID(portXRO);
 
 			eROSubobjectList.add(xRONode); 
-			XRO.setEROSubobjectList(eROSubobjectList);
+			XRO.setXROSubobjectList(eROSubobjectList);
 			req.setXro(XRO);
 			log.info("Path_Computation XRO:: "+req.getXro());
 
@@ -566,7 +566,7 @@ public class Path_Computation extends Thread
 			destEP.setEndPointDataPathTLV(destDataPathTLV);
 			
 			P2PEndpoints p2pep=new P2PEndpoints();
-			p2pep.setSourceEndPoints(sourceEP);
+			p2pep.setSourceEndpoint(sourceEP);
 			p2pep.setDestinationEndPoints(destEP);	
 
 			endP.setP2PEndpoints(p2pep);
@@ -588,7 +588,7 @@ public class Path_Computation extends Thread
 			xRONode.dataPath.setDataPathID(dpidXRO);
 									
 			eROSubobjectList.add(xRONode); 
-			XRO.setEROSubobjectList(eROSubobjectList);
+			XRO.setXROSubobjectList(eROSubobjectList);
 			req.setXro(XRO);
 			log.info("Path_Computation XRO:: "+req.getXro());
 			log.info("req: "+req.toString());
@@ -701,7 +701,7 @@ public class Path_Computation extends Thread
 		    }
 			
 			P2PEndpoints p2pep=new P2PEndpoints();
-			p2pep.setSourceEndPoints(sourceEP);
+			p2pep.setSourceEndpoint(sourceEP);
 			p2pep.setDestinationEndPoints(destEP);			
 
 			endP.setP2PEndpoints(p2pep);
