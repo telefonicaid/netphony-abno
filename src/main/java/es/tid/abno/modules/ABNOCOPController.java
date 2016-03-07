@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
+import javax.servlet.Servlet;
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -58,7 +60,7 @@ public class ABNOCOPController {
         Server jettyServer = new Server(params.getAbnoPort());
         jettyServer.setHandler(context);
         ServletHolder jerseyServlet =  
-        		context.addServlet(com.sun.jersey.spi.container.servlet.ServletContainer.class, "/*");
+        		context.addServlet((Class<? extends Servlet>) com.sun.jersey.spi.container.servlet.ServletContainer.class, "/*");
 
 
         jerseyServlet.setInitParameter(

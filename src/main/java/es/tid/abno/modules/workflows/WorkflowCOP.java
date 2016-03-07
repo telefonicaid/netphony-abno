@@ -3,11 +3,13 @@ package es.tid.abno.modules.workflows;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.Inet4Address;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -19,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import es.tid.abno.modules.ABNOParameters;
 import es.tid.abno.modules.Path_Computation;
 import es.tid.abno.modules.database.OpTable;
-import es.tid.pce.client.PCCPCEPSession;
+import es.tid.of.DataPathID;
 import es.tid.pce.pcep.constructs.GeneralizedBandwidthSSON;
 import es.tid.pce.pcep.constructs.PCEPIntiatedLSP;
 import es.tid.pce.pcep.constructs.UpdateRequest;
@@ -39,23 +41,24 @@ import es.tid.pce.pcep.objects.LSP;
 import es.tid.pce.pcep.objects.SRP;
 import es.tid.pce.pcep.objects.tlvs.SymbolicPathNameTLV;
 import es.tid.pce.pcep.objects.tlvs.subtlvs.SymbolicPathNameSubTLV;
+import es.tid.pce.pcepsession.GenericPCEPSession;
 import es.tid.util.UtilsFunctions;
 
 /**
- * Base class for ABNO workflows
- * @author jaume
+ * 
+ * @author b.jmgj
  *
  */
 
-public abstract class Workflow 
+public abstract class WorkflowCOP 
 {
 	/**
 	 * Logger
 	 */
 	protected static Logger log=Logger.getLogger("ABNO Controller");
 
-	protected HttpServletRequest request;
-	protected HttpServletResponse response;
+	protected Hashtable<String, String> request;
+	protected String response;
 	protected LinkedList<Path_Computation> path_Computationlist;
 	protected ABNOParameters params;
 	protected HashMap<Integer, OpTable> oPtable;
@@ -63,13 +66,17 @@ public abstract class Workflow
 
 	protected PCEPReport reportResp;
 
-	public Workflow(HttpServletRequest request, HttpServletResponse response, LinkedList<Path_Computation> path_Computationlist, ABNOParameters params, HashMap<Integer, OpTable> oPtable)
+	public WorkflowCOP(Hashtable<String, String> request, String response, LinkedList<Path_Computation> path_Computationlist, ABNOParameters params, HashMap<Integer, OpTable> oPtable)
 	{
 		this.request = request;
 		this.response = response;
 		this.path_Computationlist = path_Computationlist;
 		this.params = params;
 		this.oPtable=oPtable;
+	}
+	
+	public String getResponse(){
+		return response;
 	}
 
 	/**
@@ -85,92 +92,93 @@ public abstract class Workflow
 	/**
 	 * The request is OK (200)
 	 */
-	protected void replyOkey()
-	{
-		response.setHeader("Content-Type", "application/json");
-		response.setStatus(HttpServletResponse.SC_OK);
-	}
-	
-	protected void replyOK()
-	{
-		try 
-		{
-			response.setStatus(HttpServletResponse.SC_OK);
-			response.getWriter().println("<html><body><p>Everything OK</p></body></html>");
-		} 
-		catch (IOException e) 
-		{
-			log.info(UtilsFunctions.exceptionToString(e));
-		}
-	}
-
-	/**
-	 * This is really replying Internal Server Error (500)
-	 */
-	protected void replyError()
-	{
-		try 
-		{
-			response.setHeader("Content-Type", "application/json");
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-		} 
-		catch (IOException e) 
-		{
-			log.info(UtilsFunctions.exceptionToString(e));
-		}
-	}
-
-	/**
-	 * This is really replying Client Server Error (400)
-	 * The request sent by the client was syntactically incorrect.
-	 */
-	protected void replyClientError()
-	{
-		try 
-		{
-			response.setHeader("Content-Type", "application/json");
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-		} 
-		catch (IOException e) 
-		{
-			log.info(UtilsFunctions.exceptionToString(e));
-		}
-	}
-
-	/**
-	 * @param code : code that will be sent
-	 */
-	protected void reply(int code)
-	{
-		try 
-		{
-			response.setStatus(code);
-			response.getWriter().println("<html><body><p>Code :"+code+" </p></body></html>");
-		} 
-		catch (IOException e) 
-		{
-			log.info(UtilsFunctions.exceptionToString(e));
-		}
-	}
-
-	/**
-	 * 
-	 * @param message : message
-	 */
-	protected void replyMessage(String message)
-	{
-		//response.setHeader("Content-Type", "text/plain");
-		response.setHeader("Content-Type", "application/json");
-		try 
-		{    
-			response.getWriter().println(message);
-			//response.getWriter().println("<html><body><p>Code :"+message+" </p></body></html>");
-		} 
-		catch (IOException e) 
-		{
-			log.info(UtilsFunctions.exceptionToString(e));
-		}
-	}
+//	
+//	protected void replyOkey()
+//	{
+//		response.setHeader("Content-Type", "application/json");
+//		response.setStatus(HttpServletResponse.SC_OK);
+//	}
+//	
+//	protected void replyOK()
+//	{
+//		try 
+//		{
+//			response.setStatus(HttpServletResponse.SC_OK);
+//			response.getWriter().println("<html><body><p>Everything OK</p></body></html>");
+//		} 
+//		catch (IOException e) 
+//		{
+//			log.info(UtilsFunctions.exceptionToString(e));
+//		}
+//	}
+//
+//	/**
+//	 * This is really replying Internal Server Error (500)
+//	 */
+//	protected void replyError()
+//	{
+//		try 
+//		{
+//			response.setHeader("Content-Type", "application/json");
+//			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//		} 
+//		catch (IOException e) 
+//		{
+//			log.info(UtilsFunctions.exceptionToString(e));
+//		}
+//	}
+//
+//	/**
+//	 * This is really replying Client Server Error (400)
+//	 * The request sent by the client was syntactically incorrect.
+//	 */
+//	protected void replyClientError()
+//	{
+//		try 
+//		{
+//			response.setHeader("Content-Type", "application/json");
+//			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+//		} 
+//		catch (IOException e) 
+//		{
+//			log.info(UtilsFunctions.exceptionToString(e));
+//		}
+//	}
+//
+//	/**
+//	 * @param code : code that will be sent
+//	 */
+//	protected void reply(int code)
+//	{
+//		try 
+//		{
+//			response.setStatus(code);
+//			response.getWriter().println("<html><body><p>Code :"+code+" </p></body></html>");
+//		} 
+//		catch (IOException e) 
+//		{
+//			log.info(UtilsFunctions.exceptionToString(e));
+//		}
+//	}
+//
+//	/**
+//	 * 
+//	 * @param message : message
+//	 */
+//	protected void replyMessage(String message)
+//	{
+//		//response.setHeader("Content-Type", "text/plain");
+//		response.setHeader("Content-Type", "application/json");
+//		try 
+//		{    
+//			response.getWriter().println(message);
+//			//response.getWriter().println("<html><body><p>Code :"+message+" </p></body></html>");
+//		} 
+//		catch (IOException e) 
+//		{
+//			log.info(UtilsFunctions.exceptionToString(e));
+//		}
+//	}
 
 
 	protected void printOPTable() {
@@ -187,41 +195,6 @@ public abstract class Workflow
 		System.out.println("-----------------------------------------------------------------");
 	}
 
-	
-	protected PCEPInitiate delete(int id)
-	{
-		PCEPInitiate pcepInit = new PCEPInitiate();
-
-		//For the time being, no need to put anything here
-		SRP rsp = new SRP();
-		rsp.setrFlag(true);
-		
-		rsp.setSRP_ID_number(PCCPCEPSession.getNewReqIDCounter());
-
-		//For the time being, no need to put anything here
-		LSP lsp = new LSP();
-		lsp.setLspId(id);
-		
-		SymbolicPathNameTLV spn = new SymbolicPathNameTLV();
-		spn.setSymbolicPathNameID("IDEALIST".getBytes());
-		lsp.setSymbolicPathNameTLV_tlv(spn);	
-
-//		ExplicitRouteObject ero;
-//		ero = (pcepresponse.getResponse(0).getPath(0).geteRO());
-//				
-		PCEPIntiatedLSP pcepIntiatedLSP = new PCEPIntiatedLSP();
-		//pcepIntiatedLSP.setEro(ero);
-		pcepIntiatedLSP.setRsp(rsp);
-		pcepIntiatedLSP.setLsp(lsp);
-		
-		//pcepIntiatedLSP.setBandwidth((BandwidthRequested)pcepresponse.getResponse(0).getBandwidth()); //Asumo que este bw funciona. Revisar si falla.
-		
-		pcepInit.getPcepIntiatedLSPList().add(pcepIntiatedLSP);
-
-		return pcepInit;
-	}
-	
-	
 	protected PCEPInitiate responseTOinitiate(PCEPResponse pcepresponse, int m)
 	{
 		PCEPInitiate pcepInit = new PCEPInitiate();
@@ -295,8 +268,6 @@ public abstract class Workflow
 
 		//For the time being, no need to put anything here
 		SRP rsp = new SRP();
-		
-		
 
 		//For the time being, no need to put anything here
 		LSP lsp = new LSP();
@@ -323,18 +294,18 @@ public abstract class Workflow
 	protected PCEPMessage  callPCE(PCEPInitiate pcepInit) 
 	{
 		log.info("Call PCE");
-		log.info("INITIATE: "+ pcepInit.toString());
 		return path_Computationlist.getFirst().getCrm().initiate(pcepInit, 60000);
 					
 	}
 
 	
-	protected void callProvisioningManager(PCEPInitiate pcepInit) 
+	protected void callProvisioningManager(PCEPInitiate pcepInit)
 	{
 		log.info("Call ProvisioningManager");
+		Socket clientSocket = null;
 		try 
 		{
-			Socket clientSocket = new Socket(params.getPMAddress(), params.getPcepPortTM());			
+			clientSocket = new Socket(params.getPMAddress(), params.getPcepPortTM());
 			log.info("Socket opened");	
 			/*SENDING PCEP MESSAGE*/
 			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
@@ -350,11 +321,42 @@ public abstract class Workflow
 			{
 				log.info(UtilsFunctions.exceptionToString(e));
 			}
+			//readMsg
+			/*
+			InputStream iosocket = clientSocket.getInputStream();
+			while(iosocket.available()<=0){
+				try {
+					Thread.currentThread().sleep(10);
+					System.out.println("Waiting to report...");
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}*/
+		
 		} 
 		catch (IOException e) 
 		{
 			log.severe("Couldn't get I/O for connection to port" + params.getPcepPortTM());
 		} 
+		
+		
+		//Wait and Read response (PCEP Report)
+		try {
+
+			DataInputStream inFromServer = new DataInputStream (clientSocket.getInputStream());
+
+			log.info("Provisionig Manager: Waiting for Report...");
+			byte[] msg=null;
+			msg=readMsg(inFromServer);
+			System.out.println("PM: DONE!");
+			this.reportResp = new PCEPReport(msg);
+			//System.out.println(reportResp.toString());
+			log.info("Report Receive: "+this.reportResp.toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -438,7 +440,7 @@ public abstract class Workflow
 		//For the time being, no need to put anything here
 		SRP rsp = new SRP();
 		if (delete){
-			rsp.setrFlag(true);
+			rsp.setRFlag(true);
 		}
 
 		//For the time being, no need to put anything here
@@ -469,8 +471,12 @@ public abstract class Workflow
 			}
 		} else {
 			EndPointDataPathID endP=new EndPointDataPathID();
-			endP.setDestSwitchID(dest);
-			endP.setSourceSwitchID(source);
+			DataPathID dst= new DataPathID();
+			dst.setDataPathID(dest);
+			DataPathID src= new DataPathID();
+			src.setDataPathID(source);
+			endP.setDestSwitchID(dst);
+			endP.setSourceSwitchID(src);
 			pcepIntiatedLSPList.setEndPoint(endP);
 
 		}
@@ -567,7 +573,7 @@ public abstract class Workflow
 		//For the time being, no need to put anything here
 		SRP rsp = new SRP();
 		if (delete){
-			rsp.setrFlag(true);
+			rsp.setRFlag(true);
 		}
 
 		//For the time being, no need to put anything here

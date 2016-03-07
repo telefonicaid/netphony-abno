@@ -1,7 +1,6 @@
 package es.tid.abno.modules.workflows;
 
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.LinkedList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +14,8 @@ import es.tid.pce.pcep.messages.PCEPMessage;
 import es.tid.pce.pcep.messages.PCEPReport;
 import es.tid.pce.pcep.messages.PCEPResponse;
 import es.tid.pce.pcep.objects.GeneralizedEndPoints;
-import tid.ipnms.json.JSONException;
-import tid.ipnms.json.JSONObject;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * 
@@ -27,7 +26,7 @@ import tid.ipnms.json.JSONObject;
  * 
  */
 
-public class L0ProvisioningCOPWF extends WorkflowCOP
+public class L0ProvisioningWF extends Workflow
 {
 	public static String add_mult_vlan = "add_mult_vlan";
 	private String operation;
@@ -45,7 +44,7 @@ public class L0ProvisioningCOPWF extends WorkflowCOP
 	
 
 
-	public L0ProvisioningCOPWF(Hashtable<String, String> request, String response, LinkedList<Path_Computation> path_Computationlist, ABNOParameters params, HashMap<Integer, OpTable> oPtable) 
+	public L0ProvisioningWF(HttpServletRequest request, HttpServletResponse response, LinkedList<Path_Computation> path_Computationlist, ABNOParameters params, HashMap<Integer, OpTable> oPtable) 
 	{
 		super(request, response, path_Computationlist, params, oPtable);
 	}
@@ -53,31 +52,23 @@ public class L0ProvisioningCOPWF extends WorkflowCOP
 	@Override
 	public void handleRequest() 
 	{
-		
-		//Get parameters from request
-		String idOperation = request.get("ID_Operation");
-		this.operation = request.get("Operation");
-		this.excludeNode = request.get("Exclude_Node");
-		this.OFCode=request.get("OF");
-		if (request.get("m")!=null){
-			this.m=Integer.parseInt(request.get("m"));
-		}else this.m=-1;
-		log.info("jm m: "+m);
-		this.ero = request.get("ERO");
-		
-		String remoteAddr = request.get("remoteAddr");
-		String bw=request.get("Bandwidth");
-		
-		
 		boolean delete=false;
 		boolean update=false;
 		float bandwidth=0;
 		long time_start = System.currentTimeMillis();
 		System.out.println("<REQ_L0PROV> "+time_start);
 		
-		response = "probando response denetro del workwlow";
+		String idOperation = request.getParameter("ID_Operation");
+		this.operation = request.getParameter("Operation");
+		this.excludeNode = request.getParameter("Exclude_Node");
+		this.OFCode=request.getParameter("OF");
 		
+		if (request.getParameter("m")!=null){
+			this.m=Integer.parseInt(request.getParameter("m"));
+		}else this.m=-1;
+		log.info("jm m: "+m);
 		
+		this.ero = request.getParameter("ERO");
 		
 		if (this.operation.equals("update")){
 			
@@ -89,18 +80,18 @@ public class L0ProvisioningCOPWF extends WorkflowCOP
 			
 		} else{//for add and del
 			
-			this.source = request.get("Source_Node");
-			this.destination = request.get("Destination_Node");
+			this.source = request.getParameter("Source_Node");
+			this.destination = request.getParameter("Destination_Node");
 			
 			
 			
-			this.OFCode=request.get("OF");
+			this.OFCode=request.getParameter("OF");
 
 
 
-			if (request.get("source_interface")!=null && request.get("destination_interface")!=null){
-				source_interface = Integer.parseInt(request.get("source_interface"));
-				destination_interface = Integer.parseInt(request.get("destination_interface"));
+			if (request.getParameter("source_interface")!=null && request.getParameter("destination_interface")!=null){
+				source_interface = Integer.parseInt(request.getParameter("source_interface"));
+				destination_interface = Integer.parseInt(request.getParameter("destination_interface"));
 			}
 			
 		}
@@ -115,7 +106,7 @@ public class L0ProvisioningCOPWF extends WorkflowCOP
 			idOperation=String.valueOf(serviceCounter.incrementAndGet());
 		}
 
-		
+		String bw=request.getParameter("Bandwidth");
 
 		if (idOperation!=null)
 			if (check4Services(idOperation))
@@ -165,10 +156,66 @@ public class L0ProvisioningCOPWF extends WorkflowCOP
 			
 
 		
-		
+		log.info(" XXXX Before Delete");
 		if (delete){
+			
+			log.info(" XXXX Delete");
+			
+			log.info(" XXXX isPCEInstantiation: "+params.getPolicy().get("L0ProvisioningWF").getL0pceCapabilities().getInstantiation());
+			if (params.getPolicy().get("L0ProvisioningWF").getL0pceCapabilities().getInstantiation()==false){
+			
 			long id=this.oPtable.get(Integer.parseInt(idOperation)).getPCCoperationID();
 			callProvisioningManager(pcepResponsel0ML, this.source, this.destination,(float) bandwidth, delete, id);
+			
+			}else{
+				
+//				log.info(" XXXX Sending PCEP Initiate Delete to PCE");
+//				int id=(int)this.oPtable.get(Integer.parseInt(idOperation)).getPCCoperationID();
+//				//callProvisioningManager(pcepResponsel0ML, this.source, this.destination,(float) bandwidth, delete, id);
+//				log.info(" XXXX id: "+id);
+//				callPCE(delete(pcepResponsel0ML,id));
+//				log.info("Finish callPCE Delete");
+				
+				
+				
+				
+//				if (m!=-1){//MediaChannel
+//					//L0ProvisioningWF could be obtain throw request.getParameter("Operation_Type");
+//					oFcode= params.getPolicy().get("L0ProvisioningWF").getMediaChannel().getOfCode();
+//					pcepResponsel0ML = path_Computationlist.getFirst().calculateMediaChannelPath(source, destination, source_interface, destination_interface, m, oFcode);
+//					log.info("Finish calculatePath MediaChannel");
+//					
+//				}else if (bw!=null){
+//					log.info("Bandwith is: "+bw.toString());
+//					bandwidth=Float.parseFloat(bw);
+//					//pcepResponsel0ML = path_Computationlist.getFirst().calculatePath(source,ip_dest, bandwidth);
+//					pcepResponsel0ML = path_Computationlist.getFirst().calculatePath(source, destination, source_interface, destination_interface, bandwidth, oFcode,nodeExclude,portExclude);
+//					log.info("Finish calculatePath");
+//				}else{
+//					//Does not have Bandwidth parameter
+//					pcepResponsel0ML = path_Computationlist.getFirst().calculatePath(source,destination, 0);
+//				}
+				
+				
+				
+				//pcepResponsel0ML = path_Computationlist.getFirst().calculateMediaChannelPath(source, destination, source_interface, destination_interface, m, oFcode);
+				//pcepResponsel0ML = path_Computationlist.getFirst().calculatePath(source,destination, 0);
+				//log.info(" XXXX pcepResponsel0ML: "+pcepResponsel0ML);
+				log.info(" XXXX Sending PCEP Initiate Delete to PCE");
+				int id=(int)this.oPtable.get(Integer.parseInt(idOperation)).getPCCoperationID();
+				
+				log.info(" XXXX id: "+id);
+				PCEPInitiate del = delete(id);
+				
+				GeneralizedEndPoints endPointsInitiate = new GeneralizedEndPoints();
+				endPointsInitiate = Path_Computation.createGeneralizedEndpoints(source, source_interface, destination, destination_interface);
+				del.getPcepIntiatedLSPList().get(0).setEndPoint(endPointsInitiate);
+				log.info(" XXXX del: " +del.toString());
+				responseToInitiate=callPCE(del); 
+				log.info("Finish callPCE Delete");
+				
+			}
+		
 		}else if (this.operation.equals("update")){
 			
 			
@@ -221,12 +268,12 @@ public class L0ProvisioningCOPWF extends WorkflowCOP
 			jsonParams.put("Destination_interface", destination_interface);
 			jsonParams.put("Result","L0_PATH_CONFIGURED");
 			jsonParams.put("Error_Code","NO_ERROR");
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		response = jsonParams.toString();
+		replyMessage(jsonParams.toString());
 
 		long time_end = System.currentTimeMillis();
 		System.out.println("<RESP_L0PROV> "+time_end);
@@ -237,9 +284,11 @@ public class L0ProvisioningCOPWF extends WorkflowCOP
 					idLSP = ((PCEPReport) responseToInitiate).getStateReportList().get(0).getLSP().getLspId();
 				}
 			}
-			this.oPtable.put(Integer.parseInt(idOperation), new OpTable(remoteAddr,params.getPMAddress(), String.valueOf(params.getPcepPortPM()), idLSP, "L0ProvisioningWF"));
+			this.oPtable.put(Integer.parseInt(idOperation), new OpTable(request.getRemoteAddr(),params.getPMAddress(), String.valueOf(params.getPcepPortPM()), idLSP, "L0ProvisioningWF"));
 		}else{
+			log.info(" XXXX Else operation.equals('add')");
 			this.oPtable.remove(Integer.parseInt(idOperation));
+			log.info(" XXXX Finish remove");
 		}
 		
 		//update message
@@ -248,7 +297,7 @@ public class L0ProvisioningCOPWF extends WorkflowCOP
 //		}else{
 //			this.oPtable.remove(Integer.parseInt(idOperation));
 //		}
-		log.info("jm ver gt pccoperationid"+this.oPtable.get(Integer.parseInt(idOperation)).getPCCoperationID());
+		//log.info("jm ver gt pccoperationid"+this.oPtable.get(Integer.parseInt(idOperation)).getPCCoperationID());
 		this.printOPTable();
 	}
 
@@ -276,11 +325,11 @@ public class L0ProvisioningCOPWF extends WorkflowCOP
 				jsonParams.put("Destination_Node",destination);
 				jsonParams.put("Result","ID_ALREADY_EXISTS");
 				jsonParams.put("Error_Code","ID_ERROR");
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			response = jsonParams.toString();
+			replyMessage(jsonParams.toString());
 			return true;
 		}
 
@@ -299,11 +348,11 @@ public class L0ProvisioningCOPWF extends WorkflowCOP
 				jsonParams.put("Destination_Node",destination);
 				jsonParams.put("Result","Update:ID_doesnt_Exists");
 				jsonParams.put("Error_Code","ID_ERROR");
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			response = jsonParams.toString();
+			replyMessage(jsonParams.toString());
 			return true;
 		}
 
@@ -323,11 +372,11 @@ public class L0ProvisioningCOPWF extends WorkflowCOP
 				jsonParams.put("Destination_Node",destination);
 				jsonParams.put("Result","Delete:ID_doesnt_Exists");
 				jsonParams.put("Error_Code","ID_ERROR");
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			response = jsonParams.toString();
+			replyMessage(jsonParams.toString());
 			return true;
 		}
 		return false;

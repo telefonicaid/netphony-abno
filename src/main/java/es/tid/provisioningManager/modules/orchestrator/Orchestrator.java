@@ -2351,7 +2351,7 @@ public class Orchestrator  extends Thread{
 		rpt.getStateReportList().get(0).setSRP(pcepInitiate.getPcepIntiatedLSPList().get(0).getRsp());
 		rpt.getStateReportList().get(0).getLSP().setLspId(oPcounter.get());
 		rpt.getStateReportList().get(0).setPath(new Path());
-		rpt.getStateReportList().get(0).getPath().seteRO(pcepInitiate.getPcepIntiatedLSPList().get(0).getEro());
+		rpt.getStateReportList().get(0).getPath().setEro(pcepInitiate.getPcepIntiatedLSPList().get(0).getEro());
 
 		try {
 			rpt.encode();
