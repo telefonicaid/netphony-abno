@@ -5,7 +5,7 @@
   <version>1.2</version>
   <packaging>jar</packaging>
   <name>Netphony ABNO</name>
-  <description>Traffic Engineering Database and BGP-LS peer</description>
+  <description>ABNO Controller</description>
   <url>http://coretransport.tid.es/netphony</url>
   <licenses>
     <license>
