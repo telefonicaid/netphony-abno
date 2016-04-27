@@ -43,7 +43,9 @@ public class ABNOCOPController {
 			{
 				log.info("ABNO started with an L0-PCE");
 				Path_Computation path_ComputationOL = new Path_Computation(params.getPceOpticalLayer());
+				log.info("debug: line46");
 				path_Computationlist.add(path_ComputationOL);
+				log.info("debug: line48");
 				break;
 			}
 			default: 
@@ -51,12 +53,12 @@ public class ABNOCOPController {
 				log.info("Error in PCE Parameters");
 			}
 		}
-		
-		
+		log.info("llego al try");
+		try{
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        log.info("DEbug line 59");
         context.setContextPath("/");
-
-        System.out.println("Abnoport: "+params.getAbnoPort());
+        log.info("Abnoport: "+params.getAbnoPort());
         Server jettyServer = new Server(params.getAbnoPort());
         jettyServer.setHandler(context);
         ServletHolder jerseyServlet =  
@@ -76,14 +78,24 @@ public class ABNOCOPController {
                 "true");
         
         jerseyServlet.setInitOrder(1);
-      
+		
         
         try {
             jettyServer.start();
             jettyServer.join();
-        } finally {
+        } catch(Exception e){
+        	log.severe(e.getStackTrace().toString());
+        }finally {
+        
             jettyServer.destroy();
         }
+		}catch(Exception e){
+			log.severe(e.getStackTrace().toString());
+		}finally {
+        
+			log.severe("adios");
+        }
+		
         
 
         
