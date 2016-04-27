@@ -1,4 +1,4 @@
-package tid.provisioningManager.channels;
+package es.tid.provisioningManager.channels;
 
 import java.util.LinkedList;
 
