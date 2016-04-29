@@ -126,12 +126,13 @@
 <dependency>
  <groupId>org.eclipse.jetty</groupId>
  <artifactId>jetty-server</artifactId>
- <version>9.2.9.v20150224</version>
+ <version>9.3.8.v20160314</version>
 </dependency>
 <dependency>
  <groupId>org.eclipse.jetty</groupId>
  <artifactId>jetty-servlet</artifactId>
- <version>9.2.9.v20150224</version>
+ <version>9.3.8.v20160314</version>
+
 </dependency>
 
 </dependencies>
@@ -242,7 +243,7 @@
 
 <properties>
     <swagger-core-version>1.5.4</swagger-core-version>
-    <jetty-version>9.2.9.v20150224</jetty-version>
+    <jetty-version>8.1.11.v20130520</jetty-version>
     <jersey-version>1.18.1</jersey-version>
     <slf4j-version>1.6.3</slf4j-version>
     <junit-version>4.8.1</junit-version>
