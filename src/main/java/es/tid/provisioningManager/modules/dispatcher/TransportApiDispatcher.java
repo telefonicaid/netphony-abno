@@ -9,13 +9,13 @@ import java.util.logging.Logger;
 
 import es.tid.rsvp.objects.subobjects.EROSubobject;
 
-public class COPModeDispatcher {
+public class TransportApiDispatcher {
 	
 	private Logger log = Logger.getLogger("Dispatcher");
 	
 	public void sendRequest(InfoDispatcher infoDispatcher){
 		
-		log.info("#### Launching COPMode dispathcer...");
+		log.info("#### Launching TransportAPI dispathcer...");
 		
 		String callId = "1";
 		String aEnd = null;
@@ -81,17 +81,8 @@ public class COPModeDispatcher {
 			path = "\"path\":{"+topo_components+"}";
 		}
 		
-		callId = "20";
-		if (infoDispatcher.getRouterType().equals("LIGHTNESS")){
-			callId="10";
-		}else if ( infoDispatcher.getRouterType().equals("KDDI")){
-			callId="11";
-		}else if (infoDispatcher.getRouterType().equals("UNIVBRIS")){
-			callId="20";
-		}else if (infoDispatcher.getRouterType().equals("CTTC")){
-			callId="21";
-		}
-		log.info("v routerType="+infoDispatcher.getRouterType()+", callId="+callId+" (Constant)");
+		
+		//log.info("v routerType="+infoDispatcher.getRouterType()+", callId="+callId+" (Constant)");
 		
 		String tparams = "\"trafficParams\":{\"latency\":100,\"reservedBandwidth\":100000000}";
 		
@@ -102,15 +93,21 @@ public class COPModeDispatcher {
 		if (path!=null) jsonCOP = jsonCOP + path + ",";
 		jsonCOP = jsonCOP + tparams+","+tlayer+"}";
 		
-		String curl_string = "time curl -X POST -H \"Content-type:application/json\" -u admin:pswd1 http://"+ infoDispatcher.getControllerIP() +":"+ infoDispatcher.getControllerPort() +"/restconf/config/calls/call/"+callId+"/ -d '"+jsonCOP+"'";
+		String curl_string = "time curl -X POST -H \"Content-type:application/json\" -u admin:pswd1 http://"+ infoDispatcher.getControllerIP() +":"+ infoDispatcher.getControllerPort() +"/restconf/config/T-API/calls/call/"+callId+"/ -d '"+jsonCOP+"'";
 		//String curl_string = "date";
 		//log.info("Sending curl: "+ curl_string);
-			
+		curl_string = "curl -X GET -H \"Content-Type: application/json\" -u admin:pswd1 http://"+infoDispatcher.getControllerIP()+":"+ infoDispatcher.getControllerPort() +"/restconf/config/Context/";
+		String curl_string2 = "curl -X POST -H \"Content-Type: application/json\" -u admin:pswd1 http://"+infoDispatcher.getControllerIP()+":"+ infoDispatcher.getControllerPort() +"/restconf/operations/createConnectivityService/ -d'{\"connConstraint\":{\"serviceType\":\"POINT_TO_POINT_CONNECTIVITY\", \"serviceLayer\":[\"OCH\"] }, \"servicePort\":[ { \"serviceLayer\":\"OCH\" , \"direction\":\"BIDIRECTIONAL\", \"role\":\"SYMMETRIC\", \"_serviceEndPoint\":\"http://tapi_server:8585/restconf/config/Context/_serviceEndPoint/111\"}, { \"serviceLayer\":\"OCH\" , \"direction\":\"BIDIRECTIONAL\", \"role\":\"SYMMETRIC\", \"_serviceEndPoint\":\"http://tapi_server:8585/restconf/config/Context/_serviceEndPoint/112\"} ] }'";	
 		String[] curl_array = new String[] {
-		"bash",
-		"-c",
-		curl_string
-		};
+				"bash",
+				"-c",
+				curl_string
+				};
+		String[] curl_array2 = new String[] {
+				"bash",
+				"-c",
+				curl_string2
+				};
 		
 				
 		try {
@@ -129,6 +126,35 @@ public class COPModeDispatcher {
             log.info("-----------------------Command to execute-----------------------\n"+curl_string+"\n"+
             		"-----------------------Output of command execute-----------------------\n"+output_curl+
             		"--------------------------------------------------------------------------");
+            
+           
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			log.info("ERROR to execute command (curl)");
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			log.info("Executing command...");
+			Process proc_curl2 = Runtime.getRuntime().exec(curl_array2);
+			proc_curl2.waitFor();
+            InputStream is2 = proc_curl2.getInputStream();
+            BufferedReader br2 = new BufferedReader (new InputStreamReader (is2));
+            String aux2 = br2.readLine();
+            String output_curl2="";
+            while (aux2!=null)
+            {
+            	output_curl2 += aux2+"\n";
+                aux2 = br2.readLine();
+            }
+            log.info("-----------------------Command to execute-----------------------\n"+curl_string2+"\n"+
+            		"-----------------------Output of command execute-----------------------\n"+output_curl2+
+            		"--------------------------------------------------------------------------");
+            
+           
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			log.info("ERROR to execute command (curl)");
