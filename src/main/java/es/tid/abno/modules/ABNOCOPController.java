@@ -3,9 +3,7 @@ package es.tid.abno.modules;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.logging.Logger;
-
-import javax.servlet.Servlet;
-
+//import javax.servlet.Servlet;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -51,21 +49,20 @@ public class ABNOCOPController {
 				log.info("Error in PCE Parameters");
 			}
 		}
-		
+
 		
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
-
-        System.out.println("Abnoport: "+params.getAbnoPort());
+        log.info("Abnoport: "+params.getAbnoPort());
         Server jettyServer = new Server(params.getAbnoPort());
         jettyServer.setHandler(context);
         ServletHolder jerseyServlet =  
-        		context.addServlet((Class<? extends Servlet>) com.sun.jersey.spi.container.servlet.ServletContainer.class, "/*");
+        		context.addServlet( com.sun.jersey.spi.container.servlet.ServletContainer.class, "/*");
 
 
         jerseyServlet.setInitParameter(
                 "com.sun.jersey.config.property.packages",
-                "io.swagger.jaxrs.json;io.swagger.jaxrs.listing;io.swagger.api");
+                "io.swagger.jaxrs.json;io.swagger.jaxrs.listing;es.tid.swagger.api");
         
         jerseyServlet.setInitParameter(
                 "com.sun.jersey.spi.container.ContainerRequestFilters",
@@ -76,14 +73,19 @@ public class ABNOCOPController {
                 "true");
         
         jerseyServlet.setInitOrder(1);
-      
+		
         
         try {
             jettyServer.start();
+            //jettyServer.dumpStdErr();
             jettyServer.join();
-        } finally {
+        } catch(Exception e){
+        	log.severe(e.getStackTrace().toString());
+        }finally {     
             jettyServer.destroy();
         }
+		
+		
         
 
         
