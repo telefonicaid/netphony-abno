@@ -1,4 +1,4 @@
-package io.swagger.model;
+package es.tid.swagger.model;
 
 
 import io.swagger.annotations.*;

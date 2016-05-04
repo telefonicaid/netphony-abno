@@ -1,15 +1,11 @@
-package io.swagger.api.impl;
-
-import io.swagger.api.*;
-import io.swagger.model.*;
+package es.tid.swagger.api.impl;
 
 import com.sun.jersey.multipart.FormDataParam;
 
-import io.swagger.model.Call;
+import es.tid.swagger.api.*;
+import es.tid.swagger.model.*;
 
 import java.util.List;
-import io.swagger.api.NotFoundException;
-
 import java.io.InputStream;
 
 import com.sun.jersey.core.header.FormDataContentDisposition;

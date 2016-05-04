@@ -1,11 +1,12 @@
-package io.swagger.model;
+package es.tid.swagger.model;
 
-import io.swagger.model.Endpoint;
-import io.swagger.model.Label;
 import java.util.*;
 
 import io.swagger.annotations.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import es.tid.swagger.model.Endpoint;
+import es.tid.swagger.model.Label;
 
 
 @ApiModel(description = "")

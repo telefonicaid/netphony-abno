@@ -1,26 +1,16 @@
-package io.swagger.api;
-
-import io.swagger.model.*;
-import io.swagger.api.ConfigApiService;
-import io.swagger.api.factories.ConfigApiServiceFactory;
+package es.tid.swagger.api;
 
 import io.swagger.annotations.ApiParam;
 
 import com.sun.jersey.multipart.FormDataParam;
 
-import io.swagger.model.Call;
+import es.tid.swagger.api.ConfigApiService;
+import es.tid.swagger.api.NotFoundException;
+import es.tid.swagger.api.factories.ConfigApiServiceFactory;
+import es.tid.swagger.model.*;
+
 import java.util.*;
-import io.swagger.model.Endpoint;
-import io.swagger.model.Connection;
-import io.swagger.model.MatchRules;
-import io.swagger.model.PathType;
-import io.swagger.model.Label;
-import io.swagger.model.TrafficParams;
-import io.swagger.model.TransportLayerType;
-
 import java.util.List;
-import io.swagger.api.NotFoundException;
-
 import java.io.InputStream;
 
 import com.sun.jersey.core.header.FormDataContentDisposition;
