@@ -1,14 +1,15 @@
-package io.swagger.model;
+package es.tid.swagger.model;
 
-import io.swagger.model.Endpoint;
-import io.swagger.model.TransportLayerType;
-import io.swagger.model.Connection;
 import java.util.*;
-import io.swagger.model.MatchRules;
-import io.swagger.model.TrafficParams;
 
 import io.swagger.annotations.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import es.tid.swagger.model.Connection;
+import es.tid.swagger.model.Endpoint;
+import es.tid.swagger.model.MatchRules;
+import es.tid.swagger.model.TrafficParams;
+import es.tid.swagger.model.TransportLayerType;
 
 
 @ApiModel(description = "")

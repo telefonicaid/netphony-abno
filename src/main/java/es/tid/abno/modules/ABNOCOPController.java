@@ -62,7 +62,7 @@ public class ABNOCOPController {
 
         jerseyServlet.setInitParameter(
                 "com.sun.jersey.config.property.packages",
-                "io.swagger.jaxrs.json;io.swagger.jaxrs.listing;io.swagger.api");
+                "io.swagger.jaxrs.json;io.swagger.jaxrs.listing;es.tid.swagger.api");
         
         jerseyServlet.setInitParameter(
                 "com.sun.jersey.spi.container.ContainerRequestFilters",

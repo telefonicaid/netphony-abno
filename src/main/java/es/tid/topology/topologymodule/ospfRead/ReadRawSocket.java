@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Logger;
 
-import com.savarese.rocksaw.net.RawSocket;
+import es.tid.rocksaw.net.RawSocket;
 
 import es.tid.ospf.ospfv2.OSPFPacketTypes;
 import es.tid.ospf.ospfv2.OSPFv2HelloPacket;
