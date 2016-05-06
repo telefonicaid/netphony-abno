@@ -1,4 +1,16 @@
-# cne-abno-base
+cne-abno-base v1.3.0
+===================
+
+Repository branch build status:
+
+| **Master**  | **Develop**   |
+|:---:|:---:|
+| [![Build Status](https://travis-ci.org/telefonicaid/netphony-abno.svg?branch=master)](https://travis-ci.org/telefonicaid/netphony-abno) | [![Build Status](https://travis-ci.org/telefonicaid/netphony-abno.svg?branch=develop)](https://travis-ci.org/telefonicaid/netphony-abno) |
+
+Latest Maven Central Release: 
+
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/es.tid.netphony/abno/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/es.tid.netphony/gmpls-emulator/)
+
 Reference Implementation of ABNO
 ## Introduction
 Application-Based Network Operations (ABNO).
