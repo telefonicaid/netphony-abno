@@ -92,9 +92,11 @@ public class TopologyReaderXML extends TopologyReader
 
 				Element element_domain = (Element) nodes_domains.item(j);
 				NodeList nodes_domain_id = element_domain.getElementsByTagName("domain_id");
+				
 				for (int k = 0; k < nodes_domain_id.getLength(); k++) {
 					Element domain_id_e = (Element) nodes_domain_id.item(0);
-					String domain_id = getCharacterDataFromElement(domain_id_e);						
+					String domain_id = getCharacterDataFromElement(domain_id_e);
+					//((SimpleTEDB)ted.getDB()).setDomainID(domainID);
 				}
 				NodeList nodes = element1.getElementsByTagName("node");
 				log.info("Number of nodes: "+nodes.getLength());

@@ -1,7 +1,9 @@
 package es.tid.topologyModuleBase.database;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import es.tid.ospf.ospfv2.lsa.tlv.subtlv.complexFields.BitmapLabelSet;
@@ -391,6 +393,17 @@ public class SimpleTopology implements TopologyTEDB
 	public TEDB getDB() 
 	{
 		return ted;
+	}
+	public List<TEDB> getAllDB(){
+		List<TEDB> dbs = new ArrayList<TEDB>();
+		if(this.ted==null){
+			for(DomainTEDB tedb : teds.values()){
+				dbs.add(tedb);
+			}
+		}else{
+			dbs.add(this.ted);
+		}
+		return dbs;
 	}
 	
 	@Override

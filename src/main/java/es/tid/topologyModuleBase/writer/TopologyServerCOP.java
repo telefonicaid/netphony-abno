@@ -72,7 +72,7 @@ public class TopologyServerCOP extends TopologyServer
         
         try {
             jettyServer.start();
-            jettyServer.dumpStdErr();
+            //jettyServer.dumpStdErr();
             jettyServer.join();
         } catch(Exception e){
         	log.severe(e.getStackTrace().toString());
