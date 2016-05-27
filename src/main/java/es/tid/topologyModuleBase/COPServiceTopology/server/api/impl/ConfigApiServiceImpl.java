@@ -1,9 +1,5 @@
-package es.tid.COPServiceTopology.swagger.api.impl;
+package es.tid.topologyModuleBase.COPServiceTopology.server.api.impl;
 
-import es.tid.COPServiceTopology.swagger.api.*;
-import es.tid.COPServiceTopology.swagger.model.*;
-import es.tid.COPServiceTopology.swagger.model.Edge.EdgeTypeEnum;
-import es.tid.COPServiceTopology.swagger.model.EdgeEnd.SwitchingCapEnum;
 import es.tid.tedb.DomainTEDB;
 import es.tid.tedb.InterDomainEdge;
 import es.tid.tedb.IntraDomainEdge;
@@ -13,15 +9,16 @@ import es.tid.topologyModuleBase.writer.TopologyServerCOP;
 
 import com.sun.jersey.multipart.FormDataParam;
 
+import es.tid.topologyModuleBase.COPServiceTopology.model.*;
+import es.tid.topologyModuleBase.COPServiceTopology.model.Edge.EdgeTypeEnum;
+import es.tid.topologyModuleBase.COPServiceTopology.model.EdgeEnd.SwitchingCapEnum;
+import es.tid.topologyModuleBase.COPServiceTopology.server.api.*;
 import es.tid.topologyModuleBase.database.SimpleTopology;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-import es.tid.COPServiceTopology.swagger.api.NotFoundException;
-
 import java.io.InputStream;
 
 import com.sun.jersey.core.header.FormDataContentDisposition;
@@ -51,7 +48,7 @@ public class ConfigApiServiceImpl extends ConfigApiService {
       
     	  TEDB db = TopologyServerCOP.getActualTed().getDB(topologyId);
     	  if(db == null)
-    		  return Response.serverError().build();
+    		  throw new NotFoundException(0, "No found topology with id:"+topologyId);
     	  else
     		  return Response.ok().entity(translateTopology((DomainTEDB) db)).build();
       }
@@ -62,7 +59,7 @@ public class ConfigApiServiceImpl extends ConfigApiService {
     	  SimpleTopology ted = TopologyServerCOP.getActualTed();
     	  TEDB db = ted.getDB(topologyId);
     	  if(db==null){
-    		  return Response.noContent().build();
+    		  throw new NotFoundException(0, "No found topology with id:"+topologyId);
     	  }
     	  Iterator<IntraDomainEdge> it = ((DomainTEDB)db).getIntraDomainLinks().iterator();
     	  for( ; it.hasNext() ; ){
@@ -77,17 +74,41 @@ public class ConfigApiServiceImpl extends ConfigApiService {
   
       @Override
       public Response retrieveTopologiesTopologyEdgesLocalIfidLocalIfidById(String topologyId,String edgeId)
-      throws NotFoundException {
-      // do some magic!
-      return Response.ok().entity(new ApiResponseMessage(ApiResponseMessage.OK, "magic!")).build();
-  }
-  
+	      throws NotFoundException {
+    	  SimpleTopology ted = TopologyServerCOP.getActualTed();
+    	  TEDB db = ted.getDB(topologyId);
+    	  if(db==null){
+    		  throw new NotFoundException(0, "No found topology with id:"+topologyId);
+    	  }
+    	  Iterator<IntraDomainEdge> it = ((DomainTEDB)db).getIntraDomainLinks().iterator();
+    	  for( ; it.hasNext() ; ){
+    		   Edge edge = translateEdge((DomainTEDB)db, it.next());
+    		   if( edge.getEdgeId().equals(edgeId)){
+    			   return Response.ok().entity(edge.getLocalIfid()).build();
+    		   }
+    		  
+    	  }
+    	  throw new NotFoundException(0, "No found Edge with id:"+edgeId);
+	  }
+	  
       @Override
       public Response retrieveTopologiesTopologyEdgesRemoteIfidRemoteIfidById(String topologyId,String edgeId)
       throws NotFoundException {
-      // do some magic!
-      return Response.ok().entity(new ApiResponseMessage(ApiResponseMessage.OK, "magic!")).build();
-  }
+    	  SimpleTopology ted = TopologyServerCOP.getActualTed();
+    	  TEDB db = ted.getDB(topologyId);
+    	  if(db==null){
+    		  throw new NotFoundException(0, "No found topology with id:"+topologyId);
+    	  }
+    	  Iterator<IntraDomainEdge> it = ((DomainTEDB)db).getIntraDomainLinks().iterator();
+    	  for( ; it.hasNext() ; ){
+    		   Edge edge = translateEdge((DomainTEDB)db, it.next());
+    		   if( edge.getEdgeId().equals(edgeId)){
+    			   return Response.ok().entity(edge.getRemoteIfid()).build();
+    		   }
+    		  
+    	  }
+    	  throw new NotFoundException(0, "No found Edge with id:"+edgeId);
+	  }
   
       @Override
       public Response retrieveTopologiesTopologyEdgesSourceSourceById(String topologyId,String edgeId)
@@ -95,26 +116,43 @@ public class ConfigApiServiceImpl extends ConfigApiService {
     	  SimpleTopology ted = TopologyServerCOP.getActualTed();
     	  TEDB db = ted.getDB(topologyId);
     	  if(db==null){
-    		  return Response.noContent().build();
+    		  throw new NotFoundException(0, "No found topology with id:"+topologyId);
     	  }
     	  Iterator<IntraDomainEdge> it = ((DomainTEDB)db).getIntraDomainLinks().iterator();
     	  for( ; it.hasNext() ; ){
     		   Edge edge = translateEdge((DomainTEDB)db, it.next());
     		   if( edge.getEdgeId().equals(edgeId)){
-    			   //TODO donde sacar el node Source de un edge?
-  //  			   return Response.ok().entity(translateNode( it.next().getSource() )).build();
+    			   return Response.ok().entity(edge.getSource()).build();
     		   }
-    		  
     	  }
-	      return Response.noContent().build();
+	      throw new NotFoundException(0, "No found Edge with id:"+edgeId);
 	  }
   
       @Override
       public Response retrieveTopologiesTopologyEdgesSourceEdgeEndEdgeEndById(String topologyId,String edgeId,String edgeEndId)
       throws NotFoundException {
-      // do some magic!
-      return Response.ok().entity(new ApiResponseMessage(ApiResponseMessage.OK, "magic!")).build();
-  }
+      	  SimpleTopology ted = TopologyServerCOP.getActualTed();
+		  TEDB db = ted.getDB(topologyId);
+		  if(db==null){
+			  throw new NotFoundException(0, "No found topology with id:"+topologyId);
+		  }
+		  Iterator<IntraDomainEdge> it = ((DomainTEDB)db).getIntraDomainLinks().iterator();
+		  for( ; it.hasNext() ; ){
+			   Edge edge = translateEdge((DomainTEDB)db, it.next());
+			   if( edge.getEdgeId().equals(edgeId)){
+				   Node n = edge.getSource();
+				   for(EdgeEnd eEnd : n.getEdgeEnd()){
+					   if(eEnd.getEdgeEndId().equals(edgeEndId)){
+						   return Response.ok().entity(eEnd).build();
+					   }
+				   }
+				   throw new NotFoundException(0, "No found EdgeEnd with id:"+edgeEndId);
+				   
+			   }
+			  
+		  }
+		  throw new NotFoundException(0, "No found Edge with id:"+edgeId);
+	  }
   
       @Override
       public Response retrieveTopologiesTopologyEdgesTargetTargetById(String topologyId,String edgeId)
@@ -122,14 +160,14 @@ public class ConfigApiServiceImpl extends ConfigApiService {
     	  SimpleTopology ted = TopologyServerCOP.getActualTed();
     	  TEDB db = ted.getDB(topologyId);
     	  if(db==null){
-    		  return Response.noContent().build();
+    		  throw new NotFoundException(0, "No found topology with id:"+topologyId);
     	  }
     	  Iterator<IntraDomainEdge> it = ((DomainTEDB)db).getIntraDomainLinks().iterator();
     	  for( ; it.hasNext() ; ){
     		   Edge edge = translateEdge((DomainTEDB)db, it.next());
     		   if( edge.getEdgeId().equals(edgeId)){
-    			   //TODO donde sacar el node Target de un edge?
- //   			   return Response.ok().entity(translateNode( it.next().getTarget() )).build();
+    			   
+    			   return Response.ok().entity(edge.getTarget()).build();
     		   }
     		  
     	  }
@@ -139,8 +177,26 @@ public class ConfigApiServiceImpl extends ConfigApiService {
       @Override
       public Response retrieveTopologiesTopologyEdgesTargetEdgeEndEdgeEndById(String topologyId,String edgeId,String edgeEndId)
       throws NotFoundException {
-      // do some magic!
-	      return Response.ok().entity(new ApiResponseMessage(ApiResponseMessage.OK, "magic!")).build();
+    	  SimpleTopology ted = TopologyServerCOP.getActualTed();
+		  TEDB db = ted.getDB(topologyId);
+		  if(db==null){
+			  throw new NotFoundException(0, "No found topology with id:"+topologyId);
+		  }
+		  Iterator<IntraDomainEdge> it = ((DomainTEDB)db).getIntraDomainLinks().iterator();
+		  for( ; it.hasNext() ; ){
+			   Edge edge = translateEdge((DomainTEDB)db, it.next());
+			   if( edge.getEdgeId().equals(edgeId)){
+				   Node n = edge.getTarget();
+				   for(EdgeEnd eEnd : n.getEdgeEnd()){
+					   if(eEnd.getEdgeEndId().equals(edgeEndId)){
+						   return Response.ok().entity(eEnd).build();
+					   }
+				   }
+				   
+			   }
+			  
+		  }
+	      return Response.noContent().build();
 	  }
       
       private Node getNodeById(DomainTEDB db, String nodeId){
@@ -161,7 +217,7 @@ public class ConfigApiServiceImpl extends ConfigApiService {
     	  SimpleTopology ted = TopologyServerCOP.getActualTed();
     	  TEDB db = ted.getDB(topologyId);
     	  if(db==null){
-    		  return Response.noContent().build();
+    		  throw new NotFoundException(0, "No found topology with id:"+topologyId);
     	  }
     	  Node node = getNodeById((DomainTEDB) db, nodeId);
     	  if(node == null){
@@ -177,7 +233,7 @@ public class ConfigApiServiceImpl extends ConfigApiService {
     	  SimpleTopology ted = TopologyServerCOP.getActualTed();
     	  TEDB db = ted.getDB(topologyId);
     	  if(db==null){
-    		  return Response.noContent().build();
+    		  throw new NotFoundException(0, "No found topology with id:"+topologyId);
     	  }
     	  Node node = getNodeById((DomainTEDB) db, nodeId);
     	  if(node == null){
@@ -278,11 +334,7 @@ public class ConfigApiServiceImpl extends ConfigApiService {
 				  edge.setRemoteIfid(end);
 			  }
 		  }
-	  }
-	 
-	  //edge.setLocalIfid( translateEdgeEnd(e.getSrc_if_id())) ); 
-	  //edge.setRemoteIfid( translateEdgeEnd(e.getDst_if_id()) );
-	  
+	  }	  
 	  return edge;
   }
   /*private Edge translateEdge(InterDomainEdge e){

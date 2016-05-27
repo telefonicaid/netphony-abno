@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import es.tid.topologyModuleBase.database.SimpleTopology;
 import es.tid.topologyModuleBase.reader.TopologyReaderBGPLS;
+import es.tid.topologyModuleBase.reader.TopologyReaderCOP;
 import es.tid.topologyModuleBase.reader.TopologyReaderOSPF;
 import es.tid.topologyModuleBase.reader.TopologyReaderXML;
 import es.tid.topologyModuleBase.writer.TopologyServerCOP;
@@ -37,6 +38,10 @@ public class TMModuleInitiater
 			if (actualLittleParams.isXML())
 			{
 				(new TopologyReaderXML(ted, actualLittleParams,lock)).readTopology();
+			}
+			if (actualLittleParams.isCOPReading())
+			{
+				(new TopologyReaderCOP(ted, actualLittleParams,lock)).readTopology();
 			}
 			
 			if (actualLittleParams.isOSPF())

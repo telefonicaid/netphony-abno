@@ -1,7 +1,7 @@
-package es.tid.COPServiceTopology.swagger.api.factories;
+package es.tid.topologyModuleBase.COPServiceTopology.server.api.factories;
 
-import es.tid.COPServiceTopology.swagger.api.ConfigApiService;
-import es.tid.COPServiceTopology.swagger.api.impl.ConfigApiServiceImpl;
+import es.tid.topologyModuleBase.COPServiceTopology.server.api.ConfigApiService;
+import es.tid.topologyModuleBase.COPServiceTopology.server.api.impl.ConfigApiServiceImpl;
 
 @javax.annotation.Generated(value = "class io.swagger.codegen.languages.JaxRSServerCodegen", date = "2016-05-23T12:45:37.903+02:00")
 public class ConfigApiServiceFactory {

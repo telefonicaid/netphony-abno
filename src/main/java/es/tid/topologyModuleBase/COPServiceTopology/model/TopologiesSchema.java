@@ -1,10 +1,11 @@
-package es.tid.COPServiceTopology.swagger.model;
+package es.tid.topologyModuleBase.COPServiceTopology.model;
 
-import es.tid.COPServiceTopology.swagger.model.Topology;
 import java.util.*;
 
 import io.swagger.annotations.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import es.tid.topologyModuleBase.COPServiceTopology.model.Topology;
 
 
 @ApiModel(description = "")

@@ -1,22 +1,14 @@
-package es.tid.COPServiceTopology.swagger.api;
+package es.tid.topologyModuleBase.COPServiceTopology.server.api;
 
-import es.tid.COPServiceTopology.swagger.model.*;
-import es.tid.COPServiceTopology.swagger.api.ConfigApiService;
-import es.tid.COPServiceTopology.swagger.api.factories.ConfigApiServiceFactory;
-
+import es.tid.topologyModuleBase.COPServiceTopology.model.*;
+import es.tid.topologyModuleBase.COPServiceTopology.server.api.ConfigApiService;
+import es.tid.topologyModuleBase.COPServiceTopology.server.api.NotFoundException;
+import es.tid.topologyModuleBase.COPServiceTopology.server.api.factories.ConfigApiServiceFactory;
 import io.swagger.annotations.ApiParam;
 
 import com.sun.jersey.multipart.FormDataParam;
 
-import es.tid.COPServiceTopology.swagger.model.TopologiesSchema;
-import es.tid.COPServiceTopology.swagger.model.Topology;
-import es.tid.COPServiceTopology.swagger.model.Edge;
-import es.tid.COPServiceTopology.swagger.model.EdgeEnd;
-import es.tid.COPServiceTopology.swagger.model.Node;
-
 import java.util.List;
-import es.tid.COPServiceTopology.swagger.api.NotFoundException;
-
 import java.io.InputStream;
 
 import com.sun.jersey.core.header.FormDataContentDisposition;

@@ -1,13 +1,12 @@
-package es.tid.COPServiceTopology.swagger.api;
-
-import es.tid.COPServiceTopology.swagger.api.*;
-import es.tid.COPServiceTopology.swagger.model.*;
+package es.tid.topologyModuleBase.COPServiceTopology.server.api;
 
 import com.sun.jersey.multipart.FormDataParam;
 
 
 import java.util.List;
-import es.tid.COPServiceTopology.swagger.api.NotFoundException;
+
+import es.tid.topologyModuleBase.COPServiceTopology.model.*;
+import es.tid.topologyModuleBase.COPServiceTopology.server.api.*;
 
 import java.io.InputStream;
 

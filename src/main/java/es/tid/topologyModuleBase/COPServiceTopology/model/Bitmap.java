@@ -1,4 +1,4 @@
-package es.tid.COPServiceTopology.swagger.model;
+package es.tid.topologyModuleBase.COPServiceTopology.model;
 
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package es.tid.COPServiceTopology.swagger.api;
+package es.tid.topologyModuleBase.COPServiceTopology.server.api;
 
 import java.io.IOException;
 

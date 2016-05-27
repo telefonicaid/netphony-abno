@@ -113,14 +113,6 @@ public class TopologyModuleParams
 	 */
 	private String OSPFListenerIP = "localhost";
 	
-	/**
-	 * Active COP service-topology exporter
-	 */
-	private boolean isCOPwritting=true;
-	/**
-	 * Port of service-topology Server API
-	 */
-	private int COPPort=8081;
 	
 	/**
 	 * Controller IP (Openflow)
@@ -202,6 +194,27 @@ public class TopologyModuleParams
 	private boolean isRYU = false;
 	private boolean isXML = false;
 	private boolean isRestInfinera = false;
+	
+	/**
+	 * Active COP service-topology exporter
+	 */
+	private boolean isCOPwritting=true;
+	/**
+	 * Active COP service-topology importer
+	 */
+	private boolean isCOPReading=true;
+	/**
+	 * Port of service-topology Server API
+	 */
+	private int exportCOPPort=8081;
+	/**
+	 * Host of service-topology remote Server API
+	 */
+	private String remoteCOPhost="localhost";
+	/**
+	 * Port of service-topology remote Server API
+	 */
+	private int remoteCOPPort=8081;
 	
 	
 	public TopologyModuleParams(String confFile)
@@ -631,14 +644,42 @@ public class TopologyModuleParams
 	/**
 	 * @return the cOPPort
 	 */
-	public int getCOPPort() {
-		return COPPort;
+	public int getExportCOPPort() {
+		return exportCOPPort;
 	}
 	/**
 	 * @param cOPPort the cOPPort to set
 	 */
-	public void setCOPPort(int cOPPort) {
-		COPPort = cOPPort;
+	public void setExportCOPPort(int cOPPort) {
+		exportCOPPort = cOPPort;
+	}
+	public boolean isCOPReading() {
+		// TODO Auto-generated method stub
+		return isCOPReading;
+	}
+	/**
+	 * @return the remoteCOPhost
+	 */
+	public String getRemoteCOPhost() {
+		return remoteCOPhost;
+	}
+	/**
+	 * @param remoteCOPhost the remoteCOPhost to set
+	 */
+	public void setRemoteCOPhost(String remoteCOPhost) {
+		this.remoteCOPhost = remoteCOPhost;
+	}
+	/**
+	 * @return the remoteCOPPort
+	 */
+	public int getRemoteCOPPort() {
+		return remoteCOPPort;
+	}
+	/**
+	 * @param remoteCOPPort the remoteCOPPort to set
+	 */
+	public void setRemoteCOPPort(int remoteCOPPort) {
+		this.remoteCOPPort = remoteCOPPort;
 	}
 	
 }
