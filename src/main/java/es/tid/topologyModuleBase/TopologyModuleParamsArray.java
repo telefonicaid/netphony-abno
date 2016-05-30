@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import javax.jws.soap.InitParam;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -161,6 +162,25 @@ public class TopologyModuleParamsArray
 				paramList.add(littleParams);
 			}
 			
+			NodeList list_nodes_COP = doc.getElementsByTagName("COP");
+			
+			for (int i = 0; i < list_nodes_COP.getLength(); i++) 
+			{
+				Element nodes_cop = (Element) list_nodes_COP.item(i);
+				TopologyModuleParams littleParams = new TopologyModuleParams();
+				if(nodes_cop.getElementsByTagName("import_ip").getLength()>0){
+					
+					littleParams.setRemoteCOPhost((getCharacterDataFromElement(((Element) nodes_cop.getElementsByTagName("import_ip").item(0)))));
+					littleParams.setRemoteCOPPort(Integer.parseInt((getCharacterDataFromElement(((Element) nodes_cop.getElementsByTagName("import_port").item(0))))));
+					littleParams.setCOPReading(true);
+				}
+				if(nodes_cop.getElementsByTagName("serve_port").getLength()>0){
+					littleParams.setExportCOPPort(Integer.parseInt((getCharacterDataFromElement(((Element) nodes_cop.getElementsByTagName("serve_port").item(0))))));
+					littleParams.setCOPWriting(true);
+				}
+				paramList.add(littleParams);
+			}
+			
 			NodeList list_nodes_ws = doc.getElementsByTagName("WSOld");
 			
 			for (int i = 0; i < list_nodes_ws.getLength(); i++) 
@@ -174,7 +194,6 @@ public class TopologyModuleParamsArray
 				littleParams.setWSOld(true);
 				paramList.add(littleParams);
 			}
-			
 			
 			
 		}

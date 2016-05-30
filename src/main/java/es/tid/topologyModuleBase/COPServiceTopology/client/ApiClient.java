@@ -28,6 +28,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import java.net.URLEncoder;
 
 import java.io.IOException;
@@ -348,6 +352,17 @@ public class ApiClient {
   /**
    * Deserialize response body to Java object according to the Content-Type.
    */
+  
+  private static String convertStreamToString(InputStream is) throws Exception {
+	    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+	    StringBuilder sb = new StringBuilder();
+	    String line = null;
+	    while ((line = reader.readLine()) != null) {
+	      sb.append(line + "\n");
+	    }
+	    is.close();
+	    return sb.toString();
+	  }
   public <T> T deserialize(ClientResponse response, TypeRef returnType) throws ApiException {
     String contentType = null;
     List<String> contentTypes = response.getHeaders().get("Content-Type");
@@ -356,10 +371,17 @@ public class ApiClient {
     if (contentType == null)
       throw new ApiException(500, "missing Content-Type in response");
 
-    String body;
-    if (response.hasEntity())
-      body = (String) response.getEntity(String.class);
-    else
+    String body="";
+    if (response.hasEntity()){
+    	try {
+			body= convertStreamToString(response.getEntityInputStream());
+			System.out.println(body);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+    	//body = (String) response.getEntity(String.class);
+    }else
       body = "";
 
     if (contentType.startsWith("application/json")) {

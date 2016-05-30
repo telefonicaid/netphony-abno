@@ -202,11 +202,11 @@ public class TopologyModuleParams
 	/**
 	 * Active COP service-topology importer
 	 */
-	private boolean isCOPReading=true;
+	private boolean isCOPReading=false;
 	/**
 	 * Port of service-topology Server API
 	 */
-	private int exportCOPPort=8081;
+	private int exportCOPPort=8087;
 	/**
 	 * Host of service-topology remote Server API
 	 */
@@ -641,6 +641,10 @@ public class TopologyModuleParams
 		// TODO Auto-generated method stub
 		return this.isCOPwritting;
 	}
+	public void setCOPWriting(boolean isCOPwritting)
+	{
+		this.isCOPwritting = isCOPwritting;
+	}
 	/**
 	 * @return the cOPPort
 	 */
@@ -656,6 +660,10 @@ public class TopologyModuleParams
 	public boolean isCOPReading() {
 		// TODO Auto-generated method stub
 		return isCOPReading;
+	}
+	public void setCOPReading(boolean isCOPReading)
+	{
+		this.isCOPReading = isCOPReading;
 	}
 	/**
 	 * @return the remoteCOPhost

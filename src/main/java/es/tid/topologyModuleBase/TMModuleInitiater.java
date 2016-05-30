@@ -35,14 +35,16 @@ public class TMModuleInitiater
 		{
 			TopologyModuleParams actualLittleParams = paramList.get(i);
 			//IMPORTERS
-			if (actualLittleParams.isXML())
-			{
-				(new TopologyReaderXML(ted, actualLittleParams,lock)).readTopology();
-			}
+			
 			if (actualLittleParams.isCOPReading())
 			{
 				(new TopologyReaderCOP(ted, actualLittleParams,lock)).readTopology();
 			}
+			if (actualLittleParams.isXML())
+			{
+				(new TopologyReaderXML(ted, actualLittleParams,lock)).readTopology();
+			}
+			
 			
 			if (actualLittleParams.isOSPF())
 			{
@@ -77,9 +79,7 @@ public class TMModuleInitiater
 			}
 			if (actualLittleParams.isCOPWriting())
 			{
-				TopologyServerCOP sCOP = new TopologyServerCOP(ted, actualLittleParams,lock);
-				//sCOP.setPort(actualLittleParams.getCOPPort());
-				sCOP.serveTopology();
+				(new TopologyServerCOP(ted, actualLittleParams,lock)).serveTopology();
 			}
 			
 			

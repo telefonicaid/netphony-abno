@@ -16,17 +16,14 @@ import org.w3c.dom.NodeList;
 
 import es.tid.tedb.IntraDomainEdge;
 import es.tid.tedb.SimpleTEDB;
-import es.tid.tedb.elements.EndPoint;
-import es.tid.tedb.elements.IPNodeParams;
-import es.tid.tedb.elements.Intf;
-import es.tid.tedb.elements.Link;
-import es.tid.tedb.elements.Location;
-import es.tid.tedb.elements.Node;
+
 import es.tid.topologyModuleBase.TopologyModuleParams;
 import es.tid.topologyModuleBase.COPServiceTopology.client.ApiClient;
 import es.tid.topologyModuleBase.COPServiceTopology.client.ApiException;
 import es.tid.topologyModuleBase.COPServiceTopology.client.api.DefaultApi;
+import es.tid.topologyModuleBase.COPServiceTopology.model.EdgeEnd;
 import es.tid.topologyModuleBase.COPServiceTopology.model.TopologiesSchema;
+import es.tid.topologyModuleBase.COPServiceTopology.model.*;
 import es.tid.topologyModuleBase.database.SimpleTopology;
 import es.tid.topologyModuleBase.reader.TopologyReader;
 
@@ -51,24 +48,36 @@ public class TopologyReaderCOP extends TopologyReader
 	}
 
 	public void readNetwork(DefaultApi api) {
-		//First, create the graph	
 		try {
 			TopologiesSchema retrieveTopologies = api.retrieveTopologies();
+			//EdgeEnd retrieveLocalIf = api.retrieveTopologiesTopologyEdgesLocalIfidLocalIfidById("1", "ADVA_2_CTTC_2");
 			log.info(retrieveTopologies.toString());
+			for(Topology top : retrieveTopologies.getTopology()){
+				for(Node n : top.getNodes()){
+					es.tid.tedb.elements.Node node = TranslateModel.translate2Node(n);
+					((SimpleTEDB)ted.getDB()).getNetworkGraph().addVertex(node);
+				}
+				for(Edge e: top.getEdges()){
+					es.tid.tedb.elements.Link link = TranslateModel.translate2Link(e);
+					fromLinkToIntradomainlink(link);
+				}
+			}
 		} catch (ApiException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return;
 		
 
 	}
 
-	private void fromLinkToIntradomainlink(Link link){
+	private void fromLinkToIntradomainlink(es.tid.tedb.elements.Link link){
 		boolean finished=false;
+		//System.out.println(link.toString());
 		Iterator<Object> vertices=((SimpleTEDB)this.ted.getDB()).getNetworkGraph().vertexSet().iterator();
-		Node src=null; Node dst=null;
+		es.tid.tedb.elements.Node src=null; es.tid.tedb.elements.Node dst=null;
 		while (vertices.hasNext() && !finished){
-			Node node=(Node) vertices.next();
+			es.tid.tedb.elements.Node node=(es.tid.tedb.elements.Node) vertices.next();
 			if (link.getDest().getNode().equals(node.getNodeID()))
 				dst=node;
 			else if (link.getSource().getNode().equals(node.getNodeID()))

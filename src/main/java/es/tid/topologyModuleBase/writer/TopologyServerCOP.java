@@ -19,7 +19,8 @@ import org.eclipse.jetty.servlet.ServletHolder;
 
 public class TopologyServerCOP extends TopologyServer
 {
-	private int port=8087;
+	
+	
 	static SimpleTopology actualTed;
 	
 
@@ -45,11 +46,10 @@ public class TopologyServerCOP extends TopologyServer
 	{
 		log.info("Acting as BGP Peer");
 		
-
 		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
-        log.info("Service-Topology Port: "+this.port);
-        Server jettyServer = new Server(this.port);
+        log.info("Service-Topology Port: "+params.getExportCOPPort());
+        Server jettyServer = new Server(params.getExportCOPPort());
         jettyServer.setHandler(context);
         ServletHolder jerseyServlet =  
         		context.addServlet( com.sun.jersey.spi.container.servlet.ServletContainer.class, "/*");
@@ -57,7 +57,7 @@ public class TopologyServerCOP extends TopologyServer
 
         jerseyServlet.setInitParameter(
                 "com.sun.jersey.config.property.packages",
-                "io.swagger.jaxrs.json;io.swagger.jaxrs.listing;es.tid.COPServiceTopology.swagger.api");
+                "io.swagger.jaxrs.json;io.swagger.jaxrs.listing;es.tid.topologyModuleBase.COPServiceTopology.server.api");
         
         jerseyServlet.setInitParameter(
                 "com.sun.jersey.spi.container.ContainerRequestFilters",
