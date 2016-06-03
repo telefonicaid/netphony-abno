@@ -349,10 +349,10 @@ public class ApiClient {
     }
   }
 
-  /**
-   * Deserialize response body to Java object according to the Content-Type.
-   */
   
+  /**
+   *  Private function to Fix "MINE" json error in line "body = (String) response.getEntity(String.class);"
+   */
   private static String convertStreamToString(InputStream is) throws Exception {
 	    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 	    StringBuilder sb = new StringBuilder();
@@ -363,6 +363,9 @@ public class ApiClient {
 	    is.close();
 	    return sb.toString();
 	  }
+  /**
+   * Deserialize response body to Java object according to the Content-Type.
+   */
   public <T> T deserialize(ClientResponse response, TypeRef returnType) throws ApiException {
     String contentType = null;
     List<String> contentTypes = response.getHeaders().get("Content-Type");
@@ -380,7 +383,7 @@ public class ApiClient {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-    	//body = (String) response.getEntity(String.class);
+        //body = (String) response.getEntity(String.class);
     }else
       body = "";
 

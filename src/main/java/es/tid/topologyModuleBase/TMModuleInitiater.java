@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.logging.Logger;
 
+import es.tid.topologyModuleBase.session.ws.WSOldSession;
 import es.tid.topologyModuleBase.database.SimpleTopology;
 import es.tid.topologyModuleBase.reader.TopologyReaderBGPLS;
 import es.tid.topologyModuleBase.reader.TopologyReaderCOP;
@@ -76,6 +77,19 @@ public class TMModuleInitiater
 			if (actualLittleParams.isGSON())
 			{
 				(new TopologyServerGson(ted, actualLittleParams,lock)).serveTopology();
+			}
+			if (actualLittleParams.isWSOld()){
+				try {
+					log.info("WSOld.  ParamsSize: "+paramList.size()+" Time: "+i+" Info: "+actualLittleParams.getIpWSOld()+":"+actualLittleParams.getPortWSOld());
+					ServerSocket s= new ServerSocket(actualLittleParams.getPortWSOld());
+					while (true){
+						WSOldSession wssession= new WSOldSession(s.accept()	,ted);
+						wssession.start();
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			if (actualLittleParams.isCOPWriting())
 			{

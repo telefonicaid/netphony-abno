@@ -14,15 +14,19 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import es.tid.ospf.ospfv2.lsa.tlv.subtlv.MaximumBandwidth;
+import es.tid.ospf.ospfv2.lsa.tlv.subtlv.complexFields.BitmapLabelSet;
 import es.tid.tedb.IntraDomainEdge;
 import es.tid.tedb.SimpleTEDB;
-
+import es.tid.tedb.TE_Information;
 import es.tid.topologyModuleBase.TopologyModuleParams;
 import es.tid.topologyModuleBase.COPServiceTopology.client.ApiClient;
 import es.tid.topologyModuleBase.COPServiceTopology.client.ApiException;
+import es.tid.topologyModuleBase.COPServiceTopology.client.Configuration;
 import es.tid.topologyModuleBase.COPServiceTopology.client.api.DefaultApi;
 import es.tid.topologyModuleBase.COPServiceTopology.model.EdgeEnd;
 import es.tid.topologyModuleBase.COPServiceTopology.model.TopologiesSchema;
+import es.tid.topologyModuleBase.COPServiceTopology.model.Edge.EdgeTypeEnum;
 import es.tid.topologyModuleBase.COPServiceTopology.model.*;
 import es.tid.topologyModuleBase.database.SimpleTopology;
 import es.tid.topologyModuleBase.reader.TopologyReader;
@@ -40,9 +44,13 @@ public class TopologyReaderCOP extends TopologyReader
 	{
 		lock.lock();
 		//Initialize Traffic Engineering Database
-		ApiClient apiClient = new ApiClient();
+		/*ApiClient apiClient = new ApiClient();
 		apiClient.setBasePath("http://"+params.getRemoteCOPhost()+":"+params.getRemoteCOPPort()+"/restconf");
 		readNetwork(new DefaultApi(apiClient));
+		*/
+		ApiClient defaultClient = Configuration.getDefaultApiClient();
+		defaultClient.setBasePath("http://"+params.getRemoteCOPhost()+":"+params.getRemoteCOPPort()+"/restconf");
+		readNetwork(new DefaultApi());
 		lock.unlock();
 
 	}
@@ -53,13 +61,14 @@ public class TopologyReaderCOP extends TopologyReader
 			//EdgeEnd retrieveLocalIf = api.retrieveTopologiesTopologyEdgesLocalIfidLocalIfidById("1", "ADVA_2_CTTC_2");
 			log.info(retrieveTopologies.toString());
 			for(Topology top : retrieveTopologies.getTopology()){
+				
 				for(Node n : top.getNodes()){
 					es.tid.tedb.elements.Node node = TranslateModel.translate2Node(n);
 					((SimpleTEDB)ted.getDB()).getNetworkGraph().addVertex(node);
 				}
 				for(Edge e: top.getEdges()){
 					es.tid.tedb.elements.Link link = TranslateModel.translate2Link(e);
-					fromLinkToIntradomainlink(link);
+					fromLinkToIntradomainlink(link, e);
 				}
 			}
 		} catch (ApiException e) {
@@ -71,7 +80,7 @@ public class TopologyReaderCOP extends TopologyReader
 
 	}
 
-	private void fromLinkToIntradomainlink(es.tid.tedb.elements.Link link){
+	private void fromLinkToIntradomainlink(es.tid.tedb.elements.Link link, Edge e){
 		boolean finished=false;
 		//System.out.println(link.toString());
 		Iterator<Object> vertices=((SimpleTEDB)this.ted.getDB()).getNetworkGraph().vertexSet().iterator();
@@ -96,6 +105,21 @@ public class TopologyReaderCOP extends TopologyReader
 		}
 		if (dst==null){
 			log.info("DST NULL");
+		}
+		if(link.getType().equals(EdgeTypeEnum.dwdm_edge.toString())){
+			DwdmEdge dEdge = (DwdmEdge)e;
+			TE_Information tE_info= new TE_Information();
+			//tE_info.createBitmapLabelSet(numLabels, grid,  cs, n);
+			
+			byte[] bitmap=new byte[(dEdge.getBitmap().getNumChannels()/8)+1];
+			for(int i=0;i<dEdge.getBitmap().getNumChannels();i++){
+				if(dEdge.getBitmap().getArrayBits().get(i)==1){
+					bitmap[i/8]|=(128 >>(i%8));
+				}
+			}
+			((BitmapLabelSet)edge.getTE_info().getAvailableLabels().getLabelSet()).setNumLabels(dEdge.getBitmap().getNumChannels());
+			((BitmapLabelSet)edge.getTE_info().getAvailableLabels().getLabelSet()).setBytesBitmap(bitmap);
+			edge.setTE_info(tE_info);
 		}
 
 		((SimpleTEDB)this.ted.getDB()).getNetworkGraph().addEdge(src, dst, edge);
