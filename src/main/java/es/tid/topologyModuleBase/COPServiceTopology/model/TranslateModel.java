@@ -51,7 +51,7 @@ public class TranslateModel {
 		  edgeEnd.setEdgeEndId(i.getName());
 		  edgeEnd.setName(i.getName());
 		  
-		  edgeEnd.setPeerNodeId(i.getAddress().get(0)); //correct map?
+		  //edgeEnd.setPeerNodeId(i.getAddress().get(0)); //correct map?
 		  //edgeEnd.setSwitchingCap(SwitchingCapEnum.lsc);
 		  
 		  return edgeEnd;
@@ -75,11 +75,11 @@ public class TranslateModel {
 		  return bitmap;
 	  }
 	public static Edge translateEdge(DomainTEDB db,IntraDomainEdge e){
-		if(e.getTE_info()==null){
+		//if(e.getTE_info()==null){
 			return translateEthEdge(db, e);
-		}else{
-			return translateDwdmEdge(db, e);
-		}
+		//}else{
+		//	return translateDwdmEdge(db, e);
+		//}
 	}
 	public static DwdmEdge translateDwdmEdge(DomainTEDB db, IntraDomainEdge e){
 		  DwdmEdge dwdmEdge = new DwdmEdge();

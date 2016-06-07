@@ -8,6 +8,10 @@
 	<import_port>8087</import_port>
 	<serve_port>8088</serve_port>
     </COP>
+    <COP>
+	<import_ip>localhost</import_ip>
+ 	<import_port>8086</import_port>
+    </COP>
     <WSOld>
 	<ip>localhost</ip>
 	<port>9877</port>
