@@ -2,7 +2,8 @@ package es.tid.topologyModule.writer.gson;
 
 import java.lang.reflect.Type;
 import java.util.Collection;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import es.tid.topologyModule.TopologyModuleParams;
 
@@ -17,7 +18,7 @@ import es.tid.tedb.controllers.TEDUpdaterFloodlight;
 public class GsonTest 
 {
 	
-	static Logger log=Logger.getLogger("TMController");
+	static Logger log=LoggerFactory.getLogger("TMController");
 	
 	public static void main(String [] args)
 	{
@@ -27,7 +28,7 @@ public class GsonTest
 		params.initialize();
 		
 		
-		log.warning("Initializing TED from WLAN Controller");
+		log.warn("Initializing TED from WLAN Controller");
 		
 		SimpleTEDB ted = new SimpleTEDB();
 		

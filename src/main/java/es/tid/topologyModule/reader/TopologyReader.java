@@ -1,7 +1,8 @@
 package es.tid.topologyModule.reader;
 
 import java.util.concurrent.locks.Lock;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import es.tid.topologyModule.TopologyModuleParams;
 import es.tid.topologyModule.database.SimpleTopology;
@@ -15,7 +16,7 @@ public abstract class TopologyReader extends Thread
 	/**
 	 * Logger
 	 */
-	protected Logger log=Logger.getLogger("TMController");
+	protected Logger log=LoggerFactory.getLogger("TMController");
 	
 	protected SimpleTopology ted;
 	protected TopologyModuleParams params;
