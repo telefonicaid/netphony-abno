@@ -25,10 +25,16 @@
       <artifactId>servlet-api</artifactId>
       <version>2.5</version>
     </dependency>
+
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-client</artifactId>
+      <version>${jersey-version}</version>
+    </dependency>
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-json</artifactId>
-      <version>${jersey-version}</version>
+      <version>1.19</version>
     </dependency>
     <dependency>
       <groupId>com.sun.jersey</groupId>
@@ -75,7 +81,7 @@
    <dependency>
     <groupId>es.tid.netphony</groupId>
     <artifactId>network-protocols</artifactId>
-    <version>1.3.0</version>
+    <version>1.3.1</version>
   </dependency>
   <dependency>
     <groupId>es.tid.netphony</groupId>
@@ -123,6 +129,32 @@
 	<version>20090211</version>
 </dependency>
 
+<!-- JSON processing: jackson -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>${jackson-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${jackson-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-joda</artifactId>
+      <version>2.1.5</version>
+    </dependency>
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+      <version>${jodatime-version}</version>
+    </dependency>
 <dependency>
  <groupId>org.eclipse.jetty</groupId>
  <artifactId>jetty-server</artifactId>
@@ -338,6 +370,8 @@
   <slf4j-version>1.6.3</slf4j-version>
   <junit-version>4.8.1</junit-version>
   <servlet-api-version>2.5</servlet-api-version>
+  <jackson-version>2.4.2</jackson-version>
+  <jodatime-version>2.3</jodatime-version>
 </properties>
 
 </project>
