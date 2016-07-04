@@ -762,7 +762,7 @@ public class TopologyModuleSession extends Thread{
 
 					length = ((int)hdr[offset]&0xFF) << 8;
 					log.info("length 1 "+length);
-					UtilsFunctions.printByte(hdr, "hdr",log);
+					//UtilsFunctions.printByte(hdr, "hdr",log);
 
 				}
 				if (offset == 3) {

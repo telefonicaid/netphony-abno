@@ -2,7 +2,6 @@ package es.tid.topologyModule.reader;
 
 import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
-
 import es.tid.pce.server.TopologyManager;
 import es.tid.tedb.DomainTEDB;
 import es.tid.tedb.controllers.TEDUpdaterFloodlight;
