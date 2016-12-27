@@ -2,8 +2,8 @@ package es.tid.abno.modules;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.logging.Logger;
-//import javax.servlet.Servlet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -16,14 +16,14 @@ import es.tid.abno.modules.database.OpTable;
  */
 
 public class ABNOCOPController {
-	private static Logger log=Logger.getLogger("COP Controller");
+	private static Logger log;
 	private static ABNOParameters params;
 	private static HashMap<Integer,OpTable> OPtable=new HashMap<Integer,OpTable>();
 	private static LinkedList<Path_Computation> path_Computationlist;
 	 
 	public static void main(String[] args) throws Exception {
 
-		
+		log=LoggerFactory.getLogger("COP Controller");
 		//Parametros PCE
 		/*Load parameters*/
 		if (args.length >=1 ){
@@ -80,7 +80,7 @@ public class ABNOCOPController {
             //jettyServer.dumpStdErr();
             jettyServer.join();
         } catch(Exception e){
-        	log.severe(e.getStackTrace().toString());
+        	log.error(e.getStackTrace().toString());
         }finally {     
             jettyServer.destroy();
         }
