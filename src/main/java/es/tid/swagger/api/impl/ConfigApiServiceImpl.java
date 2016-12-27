@@ -11,7 +11,8 @@ import es.tid.swagger.model.*;
 import es.tid.util.UtilsFunctions;
 
 import java.util.*;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +29,7 @@ import javax.ws.rs.core.Response;
 public class ConfigApiServiceImpl extends ConfigApiService {
 	
 
-	private Logger log=Logger.getLogger("ConfigApiServiceImpl");
+	private Logger log=LoggerFactory.getLogger("ConfigApiServiceImpl");
   
       @Override
       public Response retrieveCalls()
