@@ -2,7 +2,8 @@ package es.tid.provisioningManager.modules.dispatcher;
 
 
 import java.util.Hashtable;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import es.tid.pce.pcep.objects.ExplicitRouteObject;
 
@@ -19,7 +20,7 @@ import es.tid.abno.modules.Path_Computation;
 
 public class InfoDispatcher {
 	
-	private Logger log=Logger.getLogger("infoDispatcher");
+	private Logger log=LoggerFactory.getLogger("infoDispatcher");
 	private String controllerIP = null;
 	private String controllerPort = null;
 	private String configurationMode = null;

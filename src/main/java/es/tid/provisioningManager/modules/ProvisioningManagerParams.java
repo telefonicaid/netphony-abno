@@ -1,7 +1,8 @@
 package es.tid.provisioningManager.modules;
 
 import java.io.File;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -55,7 +56,7 @@ public class ProvisioningManagerParams {
 	/*Ryu*/
 	private String controllerTopologyQuery = "/v1.0/topology/switches";
 	
-	private static Logger log=Logger.getLogger("PM Controller");
+	private static Logger log=LoggerFactory.getLogger("PM Controller");
 
 	private String Demo=null;
 

@@ -1,7 +1,7 @@
 package es.tid.provisioningManager.modules.orchestrator;
 
 import java.net.Inet4Address;
-import java.util.logging.Logger;
+
 
 import es.tid.emulator.node.transport.EmulatedPCCPCEPSession;
 import es.tid.pce.client.ClientRequestManager;
@@ -13,6 +13,8 @@ import es.tid.pce.pcep.objects.EndPointsIPv4;
 import es.tid.pce.pcep.objects.ObjectiveFunction;
 import es.tid.pce.pcep.objects.RequestParameters;
 import es.tid.pce.pcepsession.PCEPSessionsInformation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PCEPListener {
 	private static EmulatedPCCPCEPSession PCEsession;
@@ -25,7 +27,7 @@ public class PCEPListener {
 		PCEsession = new EmulatedPCCPCEPSession("localhost", 4189 ,false,pcepSessionManager);
 		PCEsession.start();		
 		this.crm=PCEsession.crm;
-		log=Logger.getLogger("PCEP listener");
+		log=LoggerFactory.getLogger("PCEP listener");
 	}
 	
 	public PCEPResponse recieve(){

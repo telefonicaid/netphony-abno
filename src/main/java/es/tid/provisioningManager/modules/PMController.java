@@ -8,7 +8,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import es.tid.emulator.node.transport.EmulatedPCCPCEPSession;
 import es.tid.pce.client.ClientRequestManager;
@@ -31,7 +32,7 @@ import es.tid.provisioningManager.modules.orchestrator.OrchestratorQueue;
 import es.tid.provisioningManager.objects.lsps.LSP;
 
 public class PMController {
-	private static Logger log=Logger.getLogger("PM Controller");
+	private static Logger log=LoggerFactory.getLogger("PM Controller");
 
 	private static HashMap<Integer, ExplicitRouteObject> eroIdMap=new HashMap<Integer, ExplicitRouteObject>();
 	private static ProvisioningManagerParams params;
@@ -106,12 +107,12 @@ public class PMController {
 						}
 						case PCEPMessageTypes.MESSAGE_PCREP:
 						{
-							log.warning("This provisioning manager was upgraded and doesn't expect PCEP Response messages");
+							log.warn("This provisioning manager was upgraded and doesn't expect PCEP Response messages");
 							break;
 						}
 						default:
 						{
-							log.warning("Received unsupported PCEP message::"+PCEPMessage.getMessageType(msg));
+							log.warn("Received unsupported PCEP message::"+PCEPMessage.getMessageType(msg));
 							break;
 						}
 					}
@@ -273,7 +274,7 @@ public class PMController {
 			{
 				work = false;
 				log.info(UtilsFunctions.exceptionToString(e));
-				log.severe("Couldn't get I/O for connection to port" + 2222);
+				log.error("Couldn't get I/O for connection to port" + 2222);
 			} 
 		}
 	}
@@ -306,10 +307,10 @@ public class PMController {
 					r = in.read(hdr, offset, 1);
 				}
 			} catch (IOException e){
-				log.warning("Error reading data: "+ e.getMessage());
+				log.warn("Error reading data: "+ e.getMessage());
 				throw e;
 			}catch (Exception e) {
-				log.warning("readMsg Oops: " + e.getMessage());
+				log.warn("readMsg Oops: " + e.getMessage());
 				throw new IOException();
 			}
 
@@ -329,7 +330,7 @@ public class PMController {
 				offset++;
 			}
 			else if (r==-1){
-				log.warning("End of stream has been reached");
+				log.warn("End of stream has been reached");
 				throw new IOException();
 			}
 		}

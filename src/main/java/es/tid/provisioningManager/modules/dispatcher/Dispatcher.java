@@ -1,10 +1,11 @@
 package es.tid.provisioningManager.modules.dispatcher;
 
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Dispatcher {
 	
-	private Logger log = Logger.getLogger("Dispatcher");
+	private Logger log = LoggerFactory.getLogger("Dispatcher");
 	
 	public void selectDispatcher(InfoDispatcher infoDispatcher){
 		
