@@ -2,7 +2,8 @@ package es.tid.abno.modules;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -14,7 +15,7 @@ import es.tid.abno.modules.database.OpTable;
 
 
 public class ABNOController {
-	private static Logger log=Logger.getLogger("ABNO Controller");
+	private static Logger log=LoggerFactory.getLogger("ABNO Controller");
 	private static ABNOParameters params;
 	private static HashMap<Integer,OpTable> OPtable=new HashMap<Integer,OpTable>();
 	

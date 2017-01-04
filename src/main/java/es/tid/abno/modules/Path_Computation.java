@@ -2,7 +2,8 @@ package es.tid.abno.modules;
 
 import java.net.Inet4Address;
 import java.util.LinkedList;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import es.tid.of.DataPathID;
 import es.tid.pce.client.ClientRequestManager;
 import es.tid.pce.client.PCCPCEPSession;
@@ -50,7 +51,7 @@ public class Path_Computation extends Thread
 		PCEsession.start();
 		this.crm = PCEsession.crm;
 		this.ofCode = pceParams.getOfCode();
-		this.log = Logger.getLogger("PCEP listener");
+		this.log = LoggerFactory.getLogger("PCEP listener");
 	}
 	
 	/**

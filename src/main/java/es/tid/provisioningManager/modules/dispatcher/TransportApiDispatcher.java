@@ -5,13 +5,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Iterator;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import es.tid.rsvp.objects.subobjects.EROSubobject;
 
 public class TransportApiDispatcher {
 	
-	private Logger log = Logger.getLogger("Dispatcher");
+	private Logger log = LoggerFactory.getLogger("Dispatcher");
 	
 	public void sendRequest(InfoDispatcher infoDispatcher){
 		
