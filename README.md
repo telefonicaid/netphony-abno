@@ -54,16 +54,21 @@ To build the .jar file and run the tests, clone the repository, go to the main d
  Authors keep also a copy of the artifact in maven central to facilitate the deployment. (*) In process
 
 ## Generation of ABNO Controller auto-executuable jar with COP as RESTCONF API
+ ```bash
+    cd netphony-abno
+    mvn package -P generate-full-jar-ABNO-COP
+ ```
+## To start ABNOController (base) run next command:
+We have to keep in mind that PCE Session it's required.
+[PCE github](urlpcegithub).
+```
+java -Dlog4j.configurationFile=path_tp_log4j2.xml -Dname=ABNOController -jar target/abno-1.3.3-shaded.jar ABNOConfiguration.xml 
+```
 
 ## ABNOConfiguration.xml
 In the same path as a ABNO.jar, created in the previous point, we need this xml configuration file.
 You can consult about this configuration file at this link: [ABNOConfiguration.md](ABNOConfiguration.md).
 
-## To start ABNOController (base) run next command:
-We have to keep in mind that PCE Session it's required.
-[PCE github](urlpcegithub).
-```
-java -cp ABNO.jar es.tid.abno.modules.ABNOController ABNOConfiguration.xml -Dname=ABNOController
-```
+
 
 
