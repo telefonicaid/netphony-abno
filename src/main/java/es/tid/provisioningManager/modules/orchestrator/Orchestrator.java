@@ -16,7 +16,8 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.commons.beanutils.BeanUtils;
 
@@ -78,7 +79,7 @@ import es.tid.util.UtilsFunctions;
 
 public class Orchestrator  extends Thread{
 
-	private Logger log=Logger.getLogger("Orchestrator");
+	private Logger log=LoggerFactory.getLogger("Orchestrator");
 	private ProvisioningManagerParams params;
 	private TopologyModuleParams tmParams;	
 	private PCEPInitiate pcepInitiate;
@@ -108,7 +109,7 @@ public class Orchestrator  extends Thread{
 			log.info("PCEPInitiate arrived!!::"+pcepInitiate.getPcepIntiatedLSPList().get(0).getEro());
 			if (pcepInitiate.getPcepIntiatedLSPList().get(0).getEro() == null)
 			{
-				log.warning("Something wrong with received packet - ERO null");			
+				log.warn("Something wrong with received packet - ERO null");
 			}
 			else
 			{
@@ -431,7 +432,7 @@ public class Orchestrator  extends Thread{
 ////				log.info("((NodeInformation)pathList.get(i)).getId():"+((NodeInformation)pathList.get(i)).getId());
 ////				if (routerInfoList.get(((NodeInformation)pathList.get(i)).getId()) == null)
 ////				{
-////					log.severe("One of the switches is not in the topology");
+////					log.error("One of the switches is not in the topology");
 ////					throw new Exception();
 ////				}
 ////				NodeInformation nodeInf = (NodeInformation)pathList.get(i);
@@ -2325,7 +2326,7 @@ public class Orchestrator  extends Thread{
 				}
 			}
 			else if (r==-1){
-				//log.warning("End of stream has been reached");
+				//log.warn("End of stream has been reached");
 				throw new IOException();
 			}
 		}

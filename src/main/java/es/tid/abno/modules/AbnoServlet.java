@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,7 +25,7 @@ import es.tid.util.UtilsFunctions;
 
 @SuppressWarnings("serial")
 public class AbnoServlet extends HttpServlet {
-	public static final Logger log =Logger.getLogger("AbnoServlet");
+	public static final Logger log =LoggerFactory.getLogger("AbnoServlet");
 	private LinkedList<Path_Computation> path_Computationlist;	
 	private ABNOParameters params;
 	private HashMap<Integer, OpTable> opTable;
@@ -195,14 +196,14 @@ public class AbnoServlet extends HttpServlet {
 				e1.printStackTrace();
 			}
 			try {
-				log.fine("Sending message");
+				log.debug("Sending message");
 				outToServer.write(pcepResponse.getBytes());
 				outToServer.flush();
 			} catch (IOException e) {
-				log.warning("Error sending msg: " + e.getMessage());
+				log.warn("Error sending msg: " + e.getMessage());
 			}
 		} catch (IOException e) {
-			log.severe("Couldn't get I/O for connection to port" + params.getPcepPortTM());
+			log.error("Couldn't get I/O for connection to port" + params.getPcepPortTM());
 			//FIXME: Send message to controller		
 		} 
 	}

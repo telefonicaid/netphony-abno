@@ -19,7 +19,7 @@ import com.sun.jersey.multipart.FormDataParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.*;
 
-@Path("/restconf/config")
+@Path("/restconf/")
 
 
 @io.swagger.annotations.Api(value = "/config", description = "the config API")

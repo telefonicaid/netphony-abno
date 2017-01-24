@@ -13,7 +13,8 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -55,7 +56,7 @@ public abstract class WorkflowCOP
 	/**
 	 * Logger
 	 */
-	protected static Logger log=Logger.getLogger("ABNO Controller");
+	protected static Logger log=LoggerFactory.getLogger("ABNO Controller");
 
 	protected Hashtable<String, String> request;
 	protected String response;
@@ -313,7 +314,7 @@ public abstract class WorkflowCOP
 			{
 				//log.info(" Workflow pcepInit.getLength()::"+pcepInit.getBytes());
 				pcepInit.encode();
-				log.fine("Sending message");
+				log.debug("Sending message");
 				outToServer.write(pcepInit.getBytes());
 				outToServer.flush();
 			} 
@@ -337,7 +338,7 @@ public abstract class WorkflowCOP
 		} 
 		catch (IOException e) 
 		{
-			log.severe("Couldn't get I/O for connection to port" + params.getPcepPortTM());
+			log.error("Couldn't get I/O for connection to port" + params.getPcepPortTM());
 		} 
 		
 		
@@ -415,7 +416,7 @@ public abstract class WorkflowCOP
 			try 
 			{
 				pceInit.encode();
-				log.fine("Sending message");
+				log.debug("Sending message");
 				outToServer.write(pceInit.getBytes());
 				outToServer.flush();
 			} 
@@ -426,7 +427,7 @@ public abstract class WorkflowCOP
 		} 
 		catch (IOException e) 
 		{
-			log.severe("Couldn't get I/O for connection to port" + params.getPcepPortTM());
+			log.error("Couldn't get I/O for connection to port" + params.getPcepPortTM());
 		} 
 	}
 	protected void callProvisioningManager(PCEPResponse pcepResponse, String source, String dest, float bandwidth, boolean delete, long id) 
@@ -518,7 +519,7 @@ public abstract class WorkflowCOP
 			try 
 			{
 				pceInit.encode();
-				log.fine("Sending message");
+				log.debug("Sending message");
 				outToServer.write(pceInit.getBytes());
 				outToServer.flush();
 			} 
@@ -529,7 +530,7 @@ public abstract class WorkflowCOP
 		} 
 		catch (IOException e) 
 		{
-			log.severe("Couldn't get I/O for connection to port" + params.getPcepPortTM());
+			log.error("Couldn't get I/O for connection to port" + params.getPcepPortTM());
 		} 
 		try {
 
@@ -647,7 +648,7 @@ public abstract class WorkflowCOP
 			try 
 			{
 				pceUdp.encode();
-				log.fine("Sending message");
+				log.debug("Sending message");
 				outToServer.write(pceUdp.getBytes());
 				outToServer.flush();
 			} 
@@ -658,7 +659,7 @@ public abstract class WorkflowCOP
 		} 
 		catch (IOException e) 
 		{
-			log.severe("Couldn't get I/O for connection to port" + params.getPcepPortTM());
+			log.error("Couldn't get I/O for connection to port" + params.getPcepPortTM());
 		} 
 		try {
 
@@ -711,10 +712,10 @@ public abstract class WorkflowCOP
 					r = in.read(hdr, offset, 1);
 				}
 			} catch (IOException e){
-				log.warning("Error reading data: "+ e.getMessage());
+				log.warn("Error reading data: "+ e.getMessage());
 				throw e;
 			}catch (Exception e) {
-				log.warning("readMsg Oops: " + e.getMessage());
+				log.warn("readMsg Oops: " + e.getMessage());
 				throw new IOException();
 			}
 
@@ -734,7 +735,7 @@ public abstract class WorkflowCOP
 				offset++;
 			}
 			else if (r==-1){
-				log.warning("End of stream has been reached");
+				log.warn("End of stream has been reached");
 				throw new IOException();
 			}
 		}
